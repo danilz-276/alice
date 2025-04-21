@@ -16,7 +16,7 @@ environment:
 
 dependencies:
   alice:
-     path: packages/alice
+     path: ../packages/alice
   dio: 
   flutter:
     sdk: flutter
