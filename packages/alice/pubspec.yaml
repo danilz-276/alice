@@ -22,7 +22,7 @@ dependencies:
   path_provider: 
   permission_handler: 
   package_info_plus: 
-  open_filex: 
+  # open_filex: 
   sensors_plus: 
   share_plus: 
   collection: 
