@@ -1,83 +1,83 @@
-<p align="center">
-<img src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/logo.png" width="250px">
-</p>
+# vm-log-api
 
-# Alice
+Thư viện Flutter để log và inspect HTTP API ngay trong app.
 
-[![pub package](https://img.shields.io/pub/v/alice.svg)](https://pub.dartlang.org/packages/alice)
-[![pub package](https://img.shields.io/pub/v/alice_dio.svg)](https://pub.dartlang.org/packages/alice_dio)
-[![pub package](https://img.shields.io/pub/v/alice_chopper.svg)](https://pub.dartlang.org/packages/alice_chopper)
-[![pub package](https://img.shields.io/pub/v/alice_http.svg)](https://pub.dartlang.org/packages/alice_http)
-[![pub package](https://img.shields.io/pub/v/alice_http_client.svg)](https://pub.dartlang.org/packages/alice_http_client)
-[![pub package](https://img.shields.io/pub/v/alice_objectbox.svg)](https://pub.dartlang.org/packages/alice_objectbox)
-[![pub package](https://img.shields.io/badge/platform-flutter-blue.svg)](https://github.com/jhomlala/alice)
-[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
+## Packages
 
-Alice is an HTTP Inspector tool for Flutter which helps debugging http requests. It catches and stores http requests and responses, which can be viewed via simple UI. It is inspired from [Chuck](https://github.com/jgilfelt/chuck) and [Chucker](https://github.com/ChuckerTeam/chucker).
+- `vm_log_api`: lõi inspector UI + storage + export/share log
+- `vm_log_api_dio`: adapter cho Dio interceptor
 
-<table>
-  <tr>
-    <td>
-		<img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/1.png">
-    </td>
-    <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/2.png">
-    </td>
-    <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/3.png">
-    </td>
-    <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/4.png">
-    </td>
-     <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/5.png">
-    </td>
-    <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/6.png">
-    </td>
-  </tr>
-  <tr>
-    <td>
-	<img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/7.png">
-    </td>
-    <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/8.png">
-    </td>
-    <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/9.png">
-    </td>
-    <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/10.png">
-    </td>
-    <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/11.png">
-    </td>
-     <td>
-       <img width="250px" src="https://raw.githubusercontent.com/jhomlala/alice/master/packages/alice/media/12.png">
-    </td>
-  </tr>
+## Cài Đặt (monorepo/local path)
 
-</table>
+```yaml
+dependencies:
+  vm_log_api:
+    path: packages/vm_log_api
+  vm_log_api_dio:
+    path: packages/vm_log_api_dio
+```
 
-**Supported Dart http client plugins:**
+## Cách Dùng Cơ Bản (Dio)
 
-- Dio
-- HttpClient from dart:io package
-- Http from http/http package
-- Chopper
-- Generic HTTP client
+```dart
+import 'package:dio/dio.dart';
+import 'package:vm_log_api/vm_log_api.dart';
+import 'package:vm_log_api/model/vm_log_api_configuration.dart';
+import 'package:vm_log_api_dio/vm_log_api_dio_adapter.dart';
 
-**Features:**  
-✔️ Detailed logs for each HTTP calls (HTTP Request, HTTP Response)  
-✔️ Inspector UI for viewing HTTP calls  
-✔️ Save HTTP calls to file  
-✔️ Statistics  
-✔️ Notification on HTTP call  
-✔️ Support for top used HTTP clients in Dart  
-✔️ Error handling  
-✔️ Shake to open inspector  
-✔️ HTTP calls search  
-✔️ Flutter/Android logs  
+final adapter = VmLogApiDioAdapter();
 
-## Documentation
-You can find documentation [here.](https://jhomlala.github.io/alice/)
+final logApi = VmLogApi(
+  configuration: AliceConfiguration(
+    showNotification: false,
+    openInspectorOnHttpCall: false,
+    inspectorPath: '/vm-log-api',
+    inspectorTitle: 'vm-log-api',
+  ),
+)..addAdapter(adapter);
+
+final dio = Dio()..interceptors.add(adapter);
+```
+
+## Mở Màn Inspector
+
+### 1) Bằng code
+
+```dart
+logApi.showInspector();
+```
+
+### 2) Bằng router path (go_router)
+
+```dart
+GoRoute(
+  path: logApi.inspectorPath,
+  builder: (_, __) => logApi.buildInspectorScreen(),
+);
+
+context.push(logApi.inspectorPath);
+```
+
+## Cấu Hình Quan Trọng
+
+- `inspectorTitle`: tiêu đề hiển thị ở list/detail (mặc định `vm-log-api`)
+- `inspectorPath`: route path để mở inspector (mặc định `/vm-log-api`)
+- `showNotification`: bật/tắt local notification khi có request mới
+- `openInspectorOnHttpCall`: tự bật màn inspector khi có call mới
+- `showInspectorOnShake`: mở inspector khi lắc máy
+
+## Example
+
+Chạy ví dụ:
+
+```bash
+cd examples/vm_log_api_dio
+flutter pub get
+flutter run
+```
+
+Màn example có:
+
+- Nút chạy polling API mỗi 2 giây
+- Chế độ API chậm để test request chồng nhau
+- Nút mở inspector
