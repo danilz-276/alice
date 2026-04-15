@@ -17,6 +17,20 @@ dependencies:
     path: packages/vm_log_api_dio
 ```
 
+## Cài Đặt Qua Git (Monorepo)
+
+```yaml
+dependencies:
+  vm_log_api:
+    git:
+      url: https://bitbucket.vietmap.vn/scm/~datdnt/packages.git
+      path: packages/vm-log-api/packages/vm_log_api
+  vm_log_api_dio:
+    git:
+      url: https://bitbucket.vietmap.vn/scm/~datdnt/packages.git
+      path: packages/vm-log-api/packages/vm_log_api_dio
+```
+
 ## Cách Dùng Cơ Bản (Dio)
 
 ```dart

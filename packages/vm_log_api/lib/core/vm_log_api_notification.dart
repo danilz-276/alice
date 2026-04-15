@@ -1,10 +1,10 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:vm_log_api/core/vm_log_api_storage.dart';
 import 'package:vm_log_api/core/vm_log_api_utils.dart';
 import 'package:vm_log_api/helper/operating_system.dart';
 import 'package:vm_log_api/model/vm_log_api_translation.dart';
 import 'package:vm_log_api/ui/common/vm_log_api_context_ext.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Helper for displaying local notifications.
 class AliceNotification {
@@ -64,7 +64,7 @@ class AliceNotification {
           macOS: initializationSettingsMacOS,
         );
     _flutterLocalNotificationsPlugin?.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
     );
     _requestNotificationPermissions();
@@ -134,12 +134,12 @@ class AliceNotification {
       _isNotificationProcessing = true;
 
       await _flutterLocalNotificationsPlugin?.show(
-        0,
-        context
+        id: 0,
+        title: context
             .i18n(AliceTranslationKey.notificationTotalRequests)
             .replaceAll(_callCount, stats.total.toString()),
-        message,
-        _notificationDetails,
+        body: message,
+        notificationDetails: _notificationDetails,
         payload: _title,
       );
 

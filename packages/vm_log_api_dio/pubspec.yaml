@@ -1,6 +1,7 @@
 name: vm_log_api_dio
 description: "Dio adapter for vm-log-api."
 version: 2.0.0
+publish_to: none
 repository: https://github.com/jhomlala/alice
 homepage: https://github.com/jhomlala/alice
 topics:
@@ -15,13 +16,16 @@ environment:
   flutter: ">=3.29.0"
 
 dependencies:
-  vm_log_api: ^2.0.0
-  dio: ^5.8.0+1
+  vm_log_api:
+    git:
+      url: https://bitbucket.vietmap.vn/scm/~datdnt/packages.git
+      path: packages/vm-log-api/packages/vm_log_api
+  dio: ^5.9.2
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 dependency_overrides:
   vm_log_api:

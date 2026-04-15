@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:vm_log_api/model/vm_log_api_translation.dart';
 import 'package:vm_log_api/ui/calls_list/model/vm_log_api_calls_list_sort_option.dart';
 import 'package:vm_log_api/ui/common/vm_log_api_context_ext.dart';
-import 'package:flutter/material.dart';
 
 /// Dialog which can be used to sort alice calls.
 class AliceSortDialog extends StatelessWidget {
@@ -54,7 +54,7 @@ class AliceSortDialog extends StatelessWidget {
                         });
                       },
                       activeTrackColor: Colors.grey,
-                      activeColor: Colors.white,
+                      activeThumbColor: Colors.white,
                     ),
                     Text(context.i18n(AliceTranslationKey.sortDialogAscending)),
                   ],

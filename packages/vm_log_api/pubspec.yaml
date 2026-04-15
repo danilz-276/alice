@@ -1,6 +1,7 @@
 name: vm_log_api
 description: vm-log-api is an HTTP Inspector tool for Flutter apps.
 version: 2.0.0
+publish_to: none
 homepage: https://github.com/jhomlala/alice
 repository: https://github.com/jhomlala/alice
 topics:
@@ -17,22 +18,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_local_notifications: ^19.4.0
+  flutter_local_notifications: ^21.0.0
   rxdart: ^0.28.0
   path_provider: ^2.1.5
   permission_handler: ^12.0.1
-  package_info_plus: ^8.3.0
-  open_filex: ^4.6.0
+  package_info_plus: 9.0.0
+  open_filex: ^4.7.0
   sensors_plus: ^6.1.1
-  share_plus: ^11.0.0
+  share_plus: ^12.0.1
   collection: ^1.19.1
   url_launcher: ^6.3.2
   equatable: ^2.0.7
 
 dev_dependencies:
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  lints: ^5.1.1
+  lints: ^6.1.0
   test: ^1.25.15
   mocktail: ^1.0.4
