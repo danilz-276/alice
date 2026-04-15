@@ -5,8 +5,8 @@ import 'package:alice/model/alice_configuration.dart';
 import 'package:alice_dio/alice_dio_adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(const MyApp());
 
@@ -33,9 +33,7 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: _alice.getNavigatorKey(),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Alice + Dio - Example'),
-        ),
+        appBar: AppBar(title: const Text('Alice + Dio - Example')),
         body: Container(
           padding: const EdgeInsets.all(16),
           child: ListView(
@@ -48,20 +46,17 @@ class _MyAppState extends State<MyApp> {
               ),
               ElevatedButton(
                 onPressed: _runDioRequests,
-                child: const Text(
-                  'Run Dio HTTP Requests',
-                ),
+                child: const Text('Run Dio HTTP Requests'),
               ),
               const SizedBox(height: 8),
               const Text(
-                  style: TextStyle(fontSize: 14),
-                  'After clicking on buttons above, you should receive notification.'
-                  ' Click on it to show inspector. You can also shake your device or click button below.'),
+                style: TextStyle(fontSize: 14),
+                'After clicking on buttons above, you should receive notification.'
+                ' Click on it to show inspector. You can also shake your device or click button below.',
+              ),
               ElevatedButton(
                 onPressed: _runHttpInspector,
-                child: const Text(
-                  'Run HTTP Inspector',
-                ),
+                child: const Text('Run HTTP Inspector'),
               ),
             ],
           ),
