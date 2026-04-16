@@ -2,8 +2,7 @@ name: vm_log_api_dio
 description: "Dio adapter for vm-log-api."
 version: 2.0.0
 publish_to: none
-repository: https://github.com/jhomlala/alice
-homepage: https://github.com/jhomlala/alice
+
 topics:
   - http
   - inspector
