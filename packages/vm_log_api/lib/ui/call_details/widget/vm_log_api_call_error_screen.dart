@@ -7,10 +7,10 @@ import 'package:vm_log_api/ui/common/vm_log_api_scroll_behavior.dart';
 import 'package:flutter/material.dart';
 
 /// Call error screen which displays info on HTTP call error.
-class AliceCallErrorScreen extends StatelessWidget {
-  const AliceCallErrorScreen({super.key, required this.call});
+class VmLogApiCallErrorScreen extends StatelessWidget {
+  const VmLogApiCallErrorScreen({super.key, required this.call});
 
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   @override
   Widget build(BuildContext context) {
@@ -20,22 +20,22 @@ class AliceCallErrorScreen extends StatelessWidget {
       final String errorText =
           error != null
               ? error.toString()
-              : context.i18n(AliceTranslationKey.callErrorScreenErrorEmpty);
+              : context.i18n(VmLogApiTranslationKey.callErrorScreenErrorEmpty);
 
       return Container(
         padding: const EdgeInsets.all(6),
         child: ScrollConfiguration(
-          behavior: AliceScrollBehavior(),
+          behavior: VmLogApiScrollBehavior(),
           child: ListView(
             children: [
-              AliceCallListRow(
-                name: context.i18n(AliceTranslationKey.callErrorScreenError),
+              VmLogApiCallListRow(
+                name: context.i18n(VmLogApiTranslationKey.callErrorScreenError),
                 value: errorText,
               ),
               if (stackTrace != null)
-                AliceCallExpandableListRow(
+                VmLogApiCallExpandableListRow(
                   name: context.i18n(
-                    AliceTranslationKey.callErrorScreenStacktrace,
+                    VmLogApiTranslationKey.callErrorScreenStacktrace,
                   ),
                   value: stackTrace.toString(),
                 ),
@@ -45,7 +45,7 @@ class AliceCallErrorScreen extends StatelessWidget {
       );
     } else {
       return Center(
-        child: Text(context.i18n(AliceTranslationKey.callErrorScreenEmpty)),
+        child: Text(context.i18n(VmLogApiTranslationKey.callErrorScreenEmpty)),
       );
     }
   }

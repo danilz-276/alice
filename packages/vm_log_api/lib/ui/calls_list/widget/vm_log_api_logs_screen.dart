@@ -5,29 +5,29 @@ import 'package:vm_log_api/ui/calls_list/widget/vm_log_api_raw_log_list_widger.d
 import 'package:flutter/material.dart';
 
 /// Screen hosted in calls list which displays logs list.
-class AliceLogsScreen extends StatelessWidget {
-  const AliceLogsScreen({
+class VmLogApiLogsScreen extends StatelessWidget {
+  const VmLogApiLogsScreen({
     super.key,
     required this.scrollController,
-    this.aliceLogger,
+    this.logger,
     this.isAndroidRawLogsEnabled = false,
   });
 
   final ScrollController scrollController;
-  final AliceLogger? aliceLogger;
+  final VmLogApiLogger? logger;
   final bool isAndroidRawLogsEnabled;
 
   @override
   Widget build(BuildContext context) =>
-      aliceLogger != null
+      logger != null
           ? isAndroidRawLogsEnabled
-              ? AliceRawLogListWidget(
+              ? VmLogApiRawLogListWidget(
                 scrollController: scrollController,
-                getRawLogs: aliceLogger?.getAndroidRawLogs(),
+                getRawLogs: logger?.getAndroidRawLogs(),
               )
-              : AliceLogListWidget(
-                logsStream: aliceLogger?.logsStream,
+              : VmLogApiLogListWidget(
+                logsStream: logger?.logsStream,
                 scrollController: scrollController,
               )
-          : const AliceEmptyLogsWidget();
+          : const VmLogApiEmptyLogsWidget();
 }

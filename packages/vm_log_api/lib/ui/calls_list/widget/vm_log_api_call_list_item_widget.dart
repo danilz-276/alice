@@ -9,11 +9,11 @@ const int _serverMaxLines = 5;
 
 /// Widget which renders one row in calls list view. It displays general
 /// information about call.
-class AliceCallListItemWidget extends StatelessWidget {
-  const AliceCallListItemWidget(this.call, this.itemClickAction, {super.key});
+class VmLogApiCallListItemWidget extends StatelessWidget {
+  const VmLogApiCallListItemWidget(this.call, this.itemClickAction, {super.key});
 
-  final AliceHttpCall call;
-  final void Function(AliceHttpCall) itemClickAction;
+  final VmLogApiHttpCall call;
+  final void Function(VmLogApiHttpCall) itemClickAction;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class AliceCallListItemWidget extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(height: 1, color: AliceTheme.grey),
+          const Divider(height: 1, color: VmLogApiTheme.grey),
         ],
       ),
     );
@@ -55,23 +55,23 @@ class AliceCallListItemWidget extends StatelessWidget {
   Color _getStatusTextColor(BuildContext context) => switch (call
       .response
       ?.status) {
-    -1 => AliceTheme.red,
+    -1 => VmLogApiTheme.red,
     int status when status < 200 =>
-      Theme.of(context).textTheme.bodyLarge?.color ?? AliceTheme.grey,
-    int status when status >= 200 && status < 300 => AliceTheme.green,
-    int status when status >= 300 && status < 400 => AliceTheme.orange,
-    int status when status >= 400 && status < 600 => AliceTheme.red,
-    _ => Theme.of(context).textTheme.bodyLarge!.color ?? AliceTheme.grey,
+      Theme.of(context).textTheme.bodyLarge?.color ?? VmLogApiTheme.grey,
+    int status when status >= 200 && status < 300 => VmLogApiTheme.green,
+    int status when status >= 300 && status < 400 => VmLogApiTheme.orange,
+    int status when status >= 400 && status < 600 => VmLogApiTheme.red,
+    _ => Theme.of(context).textTheme.bodyLarge!.color ?? VmLogApiTheme.grey,
   };
 
   /// Returns endpoint text color based on call state.
   Color _getEndpointTextColor(BuildContext context) =>
-      call.loading ? AliceTheme.grey : _getStatusTextColor(context);
+      call.loading ? VmLogApiTheme.grey : _getStatusTextColor(context);
 }
 
 /// Widget which renders server address line.
 class _ServerAddress extends StatelessWidget {
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   const _ServerAddress({required this.call});
 
@@ -83,7 +83,7 @@ class _ServerAddress extends StatelessWidget {
           padding: const EdgeInsets.only(right: 3),
           child: Icon(
             call.secure ? Icons.lock_outline : Icons.lock_open,
-            color: call.secure ? AliceTheme.green : AliceTheme.red,
+            color: call.secure ? VmLogApiTheme.green : VmLogApiTheme.red,
             size: 12,
           ),
         ),
@@ -102,7 +102,7 @@ class _ServerAddress extends StatelessWidget {
 
 /// Widget which renders endpoint and the HTTP method line.
 class _EndpointAndMethod extends StatelessWidget {
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
   final Color color;
 
   const _EndpointAndMethod({required this.call, required this.color});
@@ -131,7 +131,7 @@ class _EndpointAndMethod extends StatelessWidget {
 
 /// Widget which renders response status line.
 class _ResponseStatus extends StatelessWidget {
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
   final Color color;
 
   const _ResponseStatus({required this.call, required this.color});
@@ -147,7 +147,7 @@ class _ResponseStatus extends StatelessWidget {
               width: 20,
               height: 20,
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(AliceTheme.lightRed),
+                valueColor: AlwaysStoppedAnimation<Color>(VmLogApiTheme.lightRed),
               ),
             ),
             const SizedBox(height: 4),
@@ -163,7 +163,7 @@ class _ResponseStatus extends StatelessWidget {
   }
 
   /// Get status based on [response].
-  String _getStatus(AliceHttpResponse response) => switch (response.status) {
+  String _getStatus(VmLogApiHttpResponse response) => switch (response.status) {
     -1 => 'ERR',
     0 => '???',
     _ => '${response.status}',
@@ -172,7 +172,7 @@ class _ResponseStatus extends StatelessWidget {
 
 /// Widget which renders connection stats based on [call].
 class _ConnectionStats extends StatelessWidget {
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   const _ConnectionStats({required this.call});
 
@@ -191,14 +191,14 @@ class _ConnectionStats extends StatelessWidget {
         ),
         Flexible(
           child: Text(
-            AliceConversionHelper.formatTime(call.duration),
+            VmLogApiConversionHelper.formatTime(call.duration),
             style: const TextStyle(fontSize: 12),
           ),
         ),
         Flexible(
           child: Text(
-            '${AliceConversionHelper.formatBytes(call.request?.size ?? 0)} / '
-            '${AliceConversionHelper.formatBytes(call.response?.size ?? 0)}',
+            '${VmLogApiConversionHelper.formatBytes(call.request?.size ?? 0)} / '
+            '${VmLogApiConversionHelper.formatBytes(call.response?.size ?? 0)}',
             style: const TextStyle(fontSize: 12),
           ),
         ),

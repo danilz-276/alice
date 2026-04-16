@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Screen which displays information about HTTP call response.
-class AliceCallResponseScreen extends StatelessWidget {
-  const AliceCallResponseScreen({super.key, required this.call});
+class VmLogApiCallResponseScreen extends StatelessWidget {
+  const VmLogApiCallResponseScreen({super.key, required this.call});
 
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class AliceCallResponseScreen extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(6),
         child: ScrollConfiguration(
-          behavior: AliceScrollBehavior(),
+          behavior: VmLogApiScrollBehavior(),
           child: ListView(
             children: [
               _GeneralDataColumn(call: call),
@@ -45,7 +45,7 @@ class AliceCallResponseScreen extends StatelessWidget {
 /// Column which displays general information like received time and bytes
 /// count.
 class _GeneralDataColumn extends StatelessWidget {
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   const _GeneralDataColumn({required this.call});
 
@@ -54,21 +54,21 @@ class _GeneralDataColumn extends StatelessWidget {
     final int? status = call.response?.status;
     final String statusText =
         status == -1
-            ? context.i18n(AliceTranslationKey.callResponseError)
+            ? context.i18n(VmLogApiTranslationKey.callResponseError)
             : '$status';
 
     return Column(
       children: [
-        AliceCallListRow(
-          name: context.i18n(AliceTranslationKey.callResponseReceived),
+        VmLogApiCallListRow(
+          name: context.i18n(VmLogApiTranslationKey.callResponseReceived),
           value: call.response?.time.toString(),
         ),
-        AliceCallListRow(
-          name: context.i18n(AliceTranslationKey.callResponseBytesReceived),
-          value: AliceConversionHelper.formatBytes(call.response?.size ?? 0),
+        VmLogApiCallListRow(
+          name: context.i18n(VmLogApiTranslationKey.callResponseBytesReceived),
+          value: VmLogApiConversionHelper.formatBytes(call.response?.size ?? 0),
         ),
-        AliceCallListRow(
-          name: context.i18n(AliceTranslationKey.callResponseStatus),
+        VmLogApiCallListRow(
+          name: context.i18n(VmLogApiTranslationKey.callResponseStatus),
           value: statusText,
         ),
       ],
@@ -78,7 +78,7 @@ class _GeneralDataColumn extends StatelessWidget {
 
 /// Widget which renders column with headers of [call].
 class _HeaderDataColumn extends StatelessWidget {
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   const _HeaderDataColumn({required this.call});
 
@@ -87,17 +87,17 @@ class _HeaderDataColumn extends StatelessWidget {
     final Map<String, String>? headers = call.response?.headers;
     final String headersContent =
         headers?.isEmpty ?? true
-            ? context.i18n(AliceTranslationKey.callResponseHeadersEmpty)
+            ? context.i18n(VmLogApiTranslationKey.callResponseHeadersEmpty)
             : '';
 
     return Column(
       children: [
-        AliceCallListRow(
-          name: context.i18n(AliceTranslationKey.callResponseHeaders),
+        VmLogApiCallListRow(
+          name: context.i18n(VmLogApiTranslationKey.callResponseHeaders),
           value: headersContent,
         ),
         for (final MapEntry<String, String> header in headers?.entries ?? [])
-          AliceCallListRow(
+          VmLogApiCallListRow(
             name: '   • ${header.key}:',
             value: header.value.toString(),
           ),
@@ -110,7 +110,7 @@ class _HeaderDataColumn extends StatelessWidget {
 class _BodyDataColumn extends StatefulWidget {
   const _BodyDataColumn({required this.call});
 
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   @override
   State<_BodyDataColumn> createState() => _BodyDataColumnState();
@@ -127,7 +127,7 @@ class _BodyDataColumnState extends State<_BodyDataColumn> {
   bool _showLargeBody = false;
   bool _showUnsupportedBody = false;
 
-  AliceHttpCall get call => widget.call;
+  VmLogApiHttpCall get call => widget.call;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +180,7 @@ class _BodyDataColumnState extends State<_BodyDataColumn> {
 
   /// Parses headers and returns content type of response. It may return null.
   String? _getContentTypeOfResponse() {
-    return AliceParser.getContentType(
+    return VmLogApiParser.getContentType(
       context: context,
       headers: call.response?.headers,
     );
@@ -209,7 +209,7 @@ class _BodyDataColumnState extends State<_BodyDataColumn> {
 class _ImageBody extends StatelessWidget {
   const _ImageBody({required this.call});
 
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +218,7 @@ class _ImageBody extends StatelessWidget {
         Row(
           children: [
             Text(
-              context.i18n(AliceTranslationKey.callResponseBodyImage),
+              context.i18n(VmLogApiTranslationKey.callResponseBodyImage),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -273,7 +273,7 @@ class _LargeTextBody extends StatelessWidget {
   });
 
   final bool showLargeBody;
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
   final void Function() onShowLargeBodyPressed;
 
   @override
@@ -283,19 +283,19 @@ class _LargeTextBody extends StatelessWidget {
     } else {
       return Column(
         children: [
-          AliceCallListRow(
-            name: context.i18n(AliceTranslationKey.callResponseBody),
+          VmLogApiCallListRow(
+            name: context.i18n(VmLogApiTranslationKey.callResponseBody),
             value:
-                '${context.i18n(AliceTranslationKey.callResponseTooLargeToShow)}'
+                '${context.i18n(VmLogApiTranslationKey.callResponseTooLargeToShow)}'
                 '(${call.response?.body.toString().length ?? 0} B)',
           ),
           const SizedBox(height: 8),
           TextButton(
             onPressed: onShowLargeBodyPressed,
-            child: Text(context.i18n(AliceTranslationKey.callResponseBodyShow)),
+            child: Text(context.i18n(VmLogApiTranslationKey.callResponseBodyShow)),
           ),
           Text(
-            context.i18n(AliceTranslationKey.callResponseLargeBodyShowWarning),
+            context.i18n(VmLogApiTranslationKey.callResponseLargeBodyShowWarning),
           ),
         ],
       );
@@ -307,21 +307,21 @@ class _LargeTextBody extends StatelessWidget {
 class _TextBody extends StatelessWidget {
   const _TextBody({required this.call});
 
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   @override
   Widget build(BuildContext context) {
     final Map<String, String>? headers = call.response?.headers;
-    final String bodyContent = AliceParser.formatBody(
+    final String bodyContent = VmLogApiParser.formatBody(
       context: context,
       body: call.response?.body,
-      contentType: AliceParser.getContentType(
+      contentType: VmLogApiParser.getContentType(
         context: context,
         headers: headers,
       ),
     );
-    return AliceCallListRow(
-      name: context.i18n(AliceTranslationKey.callResponseBody),
+    return VmLogApiCallListRow(
+      name: context.i18n(VmLogApiTranslationKey.callResponseBody),
       value: bodyContent,
     );
   }
@@ -331,7 +331,7 @@ class _TextBody extends StatelessWidget {
 class _VideoBody extends StatelessWidget {
   const _VideoBody({required this.call});
 
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +340,7 @@ class _VideoBody extends StatelessWidget {
         Row(
           children: [
             Text(
-              context.i18n(AliceTranslationKey.callResponseBodyVideo),
+              context.i18n(VmLogApiTranslationKey.callResponseBodyVideo),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -348,7 +348,7 @@ class _VideoBody extends StatelessWidget {
         const SizedBox(height: 8),
         TextButton(
           child: Text(
-            context.i18n(AliceTranslationKey.callResponseBodyVideoWebBrowser),
+            context.i18n(VmLogApiTranslationKey.callResponseBodyVideoWebBrowser),
           ),
           onPressed: () async {
             await launchUrl(Uri.parse(call.uri));
@@ -370,7 +370,7 @@ class _UnknownBody extends StatelessWidget {
     required this.onShowUnsupportedBodyPressed,
   });
 
-  final AliceHttpCall call;
+  final VmLogApiHttpCall call;
   final bool showUnsupportedBody;
   final void Function() onShowUnsupportedBodyPressed;
 
@@ -378,35 +378,35 @@ class _UnknownBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, String>? headers = call.response?.headers;
     final String contentType =
-        AliceParser.getContentType(context: context, headers: headers) ??
-        context.i18n(AliceTranslationKey.callResponseHeadersUnknown);
+        VmLogApiParser.getContentType(context: context, headers: headers) ??
+        context.i18n(VmLogApiTranslationKey.callResponseHeadersUnknown);
 
     if (showUnsupportedBody) {
-      final bodyContent = AliceParser.formatBody(
+      final bodyContent = VmLogApiParser.formatBody(
         context: context,
         body: call.response?.body,
-        contentType: AliceParser.getContentType(
+        contentType: VmLogApiParser.getContentType(
           context: context,
           headers: headers,
         ),
       );
-      return AliceCallListRow(
-        name: context.i18n(AliceTranslationKey.callResponseBody),
+      return VmLogApiCallListRow(
+        name: context.i18n(VmLogApiTranslationKey.callResponseBody),
         value: bodyContent,
       );
     } else {
       return Column(
         children: [
-          AliceCallListRow(
-            name: context.i18n(AliceTranslationKey.callResponseBody),
+          VmLogApiCallListRow(
+            name: context.i18n(VmLogApiTranslationKey.callResponseBody),
             value: context
-                .i18n(AliceTranslationKey.callResponseBodyUnknown)
+                .i18n(VmLogApiTranslationKey.callResponseBodyUnknown)
                 .replaceAll(_contentType, contentType),
           ),
           TextButton(
             onPressed: onShowUnsupportedBodyPressed,
             child: Text(
-              context.i18n(AliceTranslationKey.callResponseBodyUnknownShow),
+              context.i18n(VmLogApiTranslationKey.callResponseBodyUnknownShow),
             ),
           ),
         ],

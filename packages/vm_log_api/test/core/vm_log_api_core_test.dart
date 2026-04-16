@@ -13,101 +13,101 @@ import '../mock/vm_log_api_storage_mock.dart';
 import '../mock/mocked_data.dart';
 
 void main() {
-  late AliceCore aliceCore;
-  late AliceStorage aliceStorage;
-  late AliceLogger aliceLogger;
+  late VmLogApiCore core;
+  late VmLogApiStorage storage;
+  late VmLogApiLogger logger;
 
   setUp(() {
     TestWidgetsFlutterBinding.ensureInitialized();
     registerFallbackValue(MockedData.getLoadingHttpCall());
-    registerFallbackValue(AliceHttpError());
-    registerFallbackValue(AliceHttpResponse());
-    registerFallbackValue(AliceLog(message: ""));
-    aliceStorage = AliceStorageMock();
-    aliceLogger = AliceLoggerMock();
+    registerFallbackValue(VmLogApiHttpError());
+    registerFallbackValue(VmLogApiHttpResponse());
+    registerFallbackValue(VmLogApiLog(message: ""));
+    storage = VmLogApiStorageMock();
+    logger = VmLogApiLoggerMock();
 
     when(
-      () => aliceStorage.callsStream,
+      () => storage.callsStream,
     ).thenAnswer((_) => const Stream.empty());
-    aliceCore = AliceCore(
-      configuration: AliceConfiguration(
+    core = VmLogApiCore(
+      configuration: VmLogApiConfiguration(
         showNotification: false,
         showInspectorOnShake: false,
-        storage: aliceStorage,
-        logger: aliceLogger,
+        storage: storage,
+        logger: logger,
       ),
     );
   });
 
-  group("AliceCore", () {
+  group("VmLogApiCore", () {
     test("should use storage to add call", () {
-      when(() => aliceStorage.addCall(any())).thenAnswer((_) => () {});
+      when(() => storage.addCall(any())).thenAnswer((_) => () {});
 
-      aliceCore.addCall(MockedData.getLoadingHttpCall());
+      core.addCall(MockedData.getLoadingHttpCall());
 
-      verify(() => aliceStorage.addCall(any()));
+      verify(() => storage.addCall(any()));
     });
 
     test("should use storage to add error", () {
-      when(() => aliceStorage.addError(any(), any())).thenAnswer((_) => () {});
+      when(() => storage.addError(any(), any())).thenAnswer((_) => () {});
 
-      aliceCore.addError(AliceHttpError(), 0);
+      core.addError(VmLogApiHttpError(), 0);
 
-      verify(() => aliceStorage.addError(any(), any()));
+      verify(() => storage.addError(any(), any()));
     });
 
     test("should use storage to add response", () {
       when(
-        () => aliceStorage.addResponse(any(), any()),
+        () => storage.addResponse(any(), any()),
       ).thenAnswer((_) => () {});
 
-      aliceCore.addResponse(AliceHttpResponse(), 0);
+      core.addResponse(VmLogApiHttpResponse(), 0);
 
-      verify(() => aliceStorage.addResponse(any(), any()));
+      verify(() => storage.addResponse(any(), any()));
     });
 
     test("should use storage to remove calls", () {
-      when(() => aliceStorage.removeCalls()).thenAnswer((_) => () {});
+      when(() => storage.removeCalls()).thenAnswer((_) => () {});
 
-      aliceCore.removeCalls();
+      core.removeCalls();
 
-      verify(() => aliceStorage.removeCalls());
+      verify(() => storage.removeCalls());
     });
 
     test("should use storage to get calls stream", () async {
       final calls = [MockedData.getLoadingHttpCall()];
       when(
-        () => aliceStorage.callsStream,
+        () => storage.callsStream,
       ).thenAnswer((_) => Stream.value(calls));
 
-      expect(await aliceCore.callsStream.first, calls);
+      expect(await core.callsStream.first, calls);
 
-      verify(() => aliceStorage.callsStream);
+      verify(() => storage.callsStream);
     });
 
     test("should use storage to get calls", () {
       final calls = [MockedData.getLoadingHttpCall()];
-      when(() => aliceStorage.getCalls()).thenAnswer((_) => calls);
+      when(() => storage.getCalls()).thenAnswer((_) => calls);
 
-      expect(aliceCore.getCalls(), calls);
+      expect(core.getCalls(), calls);
 
-      verify(() => aliceStorage.getCalls());
+      verify(() => storage.getCalls());
     });
 
     test("should use logger to add log", () {
-      when(() => aliceLogger.add(any())).thenAnswer((_) => {});
+      when(() => logger.add(any())).thenAnswer((_) => {});
 
-      aliceCore.addLog(AliceLog(message: "test"));
+      core.addLog(VmLogApiLog(message: "test"));
 
-      verify(() => aliceCore.addLog(any()));
+      verify(() => core.addLog(any()));
     });
 
     test("should use logger to add logs", () {
-      when(() => aliceLogger.addAll(any())).thenAnswer((_) => {});
+      when(() => logger.addAll(any())).thenAnswer((_) => {});
 
-      aliceCore.addLogs([AliceLog(message: "test")]);
+      core.addLogs([VmLogApiLog(message: "test")]);
 
-      verify(() => aliceCore.addLogs(any()));
+      verify(() => core.addLogs(any()));
     });
   });
 }

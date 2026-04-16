@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 /// Widget which displays expandable formatted row of text.
-class AliceCallExpandableListRow extends StatelessWidget {
+class VmLogApiCallExpandableListRow extends StatelessWidget {
   final String name;
   final String value;
 
-  const AliceCallExpandableListRow({
+  const VmLogApiCallExpandableListRow({
     required this.name,
     required this.value,
     super.key,

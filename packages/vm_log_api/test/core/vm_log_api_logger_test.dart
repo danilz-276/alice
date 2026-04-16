@@ -4,38 +4,38 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
 void main() {
-  late AliceLogger aliceLogger;
+  late VmLogApiLogger logger;
   setUp(() {
-    aliceLogger = AliceLogger(maximumSize: 1000);
+    logger = VmLogApiLogger(maximumSize: 1000);
   });
 
-  group("AliceLogger", () {
+  group("VmLogApiLogger", () {
     test("should add log", () {
-      final log = AliceLog(message: "test");
+      final log = VmLogApiLog(message: "test");
 
-      aliceLogger.add(log);
+      logger.add(log);
 
-      expect(aliceLogger.logs, [log]);
+      expect(logger.logs, [log]);
     });
 
     test("should add logs", () {
-      final logs = [AliceLog(message: "test"), AliceLog(message: "test2")];
+      final logs = [VmLogApiLog(message: "test"), VmLogApiLog(message: "test2")];
 
-      aliceLogger.addAll(logs);
+      logger.addAll(logs);
 
-      expect(aliceLogger.logs, logs);
+      expect(logger.logs, logs);
     });
 
     test("should clear logs", () {
-      final logs = [AliceLog(message: "test"), AliceLog(message: "test2")];
+      final logs = [VmLogApiLog(message: "test"), VmLogApiLog(message: "test2")];
 
-      aliceLogger.addAll(logs);
+      logger.addAll(logs);
 
-      expect(aliceLogger.logs.isNotEmpty, true);
+      expect(logger.logs.isNotEmpty, true);
 
-      aliceLogger.clearLogs();
+      logger.clearLogs();
 
-      expect(aliceLogger.logs.isEmpty, true);
+      expect(logger.logs.isEmpty, true);
     });
   });
 }

@@ -4,7 +4,7 @@ import 'package:vm_log_api/core/vm_log_api_storage.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
-class AliceConfiguration with EquatableMixin {
+class VmLogApiConfiguration with EquatableMixin {
   /// Default max calls count used in default memory storage.
   static const _defaultMaxCalls = 1000;
 
@@ -12,7 +12,7 @@ class AliceConfiguration with EquatableMixin {
   static const _defaultMaxLogs = 1000;
 
   /// Should user be notified with notification when there's new request caught
-  /// by Alice. Default value is true.
+  /// by VmLogApi. Default value is true.
   final bool showNotification;
 
   /// Should inspector be opened on device shake (works only with physical
@@ -43,12 +43,12 @@ class AliceConfiguration with EquatableMixin {
   final GlobalKey<NavigatorState>? navigatorKey;
 
   /// Storage where calls will be saved. The default storage is memory storage.
-  final AliceStorage aliceStorage;
+  final VmLogApiStorage storage;
 
   /// Logger instance.
-  final AliceLogger aliceLogger;
+  final VmLogApiLogger logger;
 
-  AliceConfiguration({
+  VmLogApiConfiguration({
     this.showNotification = true,
     this.showInspectorOnShake = true,
     this.openInspectorOnHttpCall = false,
@@ -58,14 +58,14 @@ class AliceConfiguration with EquatableMixin {
     this.directionality,
     this.showShareButton = true,
     GlobalKey<NavigatorState>? navigatorKey,
-    AliceStorage? storage,
-    AliceLogger? logger,
-  }) : aliceStorage =
-           storage ?? AliceMemoryStorage(maxCallsCount: _defaultMaxCalls),
+    VmLogApiStorage? storage,
+    VmLogApiLogger? logger,
+  }) : storage =
+           storage ?? VmLogApiMemoryStorage(maxCallsCount: _defaultMaxCalls),
        navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
-       aliceLogger = logger ?? AliceLogger(maximumSize: _defaultMaxLogs);
+       logger = logger ?? VmLogApiLogger(maximumSize: _defaultMaxLogs);
 
-  AliceConfiguration copyWith({
+  VmLogApiConfiguration copyWith({
     GlobalKey<NavigatorState>? navigatorKey,
     bool? showNotification,
     bool? showInspectorOnShake,
@@ -75,9 +75,9 @@ class AliceConfiguration with EquatableMixin {
     String? inspectorTitle,
     TextDirection? directionality,
     bool? showShareButton,
-    AliceStorage? aliceStorage,
-    AliceLogger? aliceLogger,
-  }) => AliceConfiguration(
+    VmLogApiStorage? storage,
+    VmLogApiLogger? logger,
+  }) => VmLogApiConfiguration(
     showNotification: showNotification ?? this.showNotification,
     showInspectorOnShake: showInspectorOnShake ?? this.showInspectorOnShake,
     openInspectorOnHttpCall:
@@ -88,8 +88,8 @@ class AliceConfiguration with EquatableMixin {
     directionality: directionality ?? this.directionality,
     showShareButton: showShareButton ?? this.showShareButton,
     navigatorKey: navigatorKey ?? this.navigatorKey,
-    storage: aliceStorage ?? this.aliceStorage,
-    logger: aliceLogger ?? this.aliceLogger,
+    storage: storage ?? this.storage,
+    logger: logger ?? this.logger,
   );
 
   @override
@@ -103,7 +103,7 @@ class AliceConfiguration with EquatableMixin {
     directionality,
     showShareButton,
     navigatorKey,
-    aliceStorage,
-    aliceLogger,
+    storage,
+    logger,
   ];
 }

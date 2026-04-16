@@ -12,25 +12,25 @@ import 'package:flutter/material.dart';
 
 /// Screen which displays information about call request: content, transfer,
 /// headers.
-class AliceCallRequestScreen extends StatelessWidget {
-  final AliceHttpCall call;
+class VmLogApiCallRequestScreen extends StatelessWidget {
+  final VmLogApiHttpCall call;
 
-  const AliceCallRequestScreen({super.key, required this.call});
+  const VmLogApiCallRequestScreen({super.key, required this.call});
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> rows = [
-      AliceCallListRow(
-        name: context.i18n(AliceTranslationKey.callRequestStarted),
+      VmLogApiCallListRow(
+        name: context.i18n(VmLogApiTranslationKey.callRequestStarted),
         value: call.request?.time.toString(),
       ),
-      AliceCallListRow(
-        name: context.i18n(AliceTranslationKey.callRequestBytesSent),
-        value: AliceConversionHelper.formatBytes(call.request?.size ?? 0),
+      VmLogApiCallListRow(
+        name: context.i18n(VmLogApiTranslationKey.callRequestBytesSent),
+        value: VmLogApiConversionHelper.formatBytes(call.request?.size ?? 0),
       ),
-      AliceCallListRow(
-        name: context.i18n(AliceTranslationKey.callRequestContentType),
-        value: AliceParser.getContentType(
+      VmLogApiCallListRow(
+        name: context.i18n(VmLogApiTranslationKey.callRequestContentType),
+        value: VmLogApiParser.getContentType(
           context: context,
           headers: call.request?.headers,
         ),
@@ -38,38 +38,38 @@ class AliceCallRequestScreen extends StatelessWidget {
     ];
 
     rows.add(
-      AliceCallListRow(
-        name: context.i18n(AliceTranslationKey.callRequestBody),
+      VmLogApiCallListRow(
+        name: context.i18n(VmLogApiTranslationKey.callRequestBody),
         value: _getBodyContent(context: context),
       ),
     );
 
-    final List<AliceFormDataField>? formDataFields =
+    final List<VmLogApiFormDataField>? formDataFields =
         call.request?.formDataFields;
     if (formDataFields?.isNotEmpty ?? false) {
       rows.add(
-        AliceCallListRow(
-          name: context.i18n(AliceTranslationKey.callRequestFormDataFields),
+        VmLogApiCallListRow(
+          name: context.i18n(VmLogApiTranslationKey.callRequestFormDataFields),
           value: '',
         ),
       );
       rows.addAll([
-        for (final AliceFormDataField field in formDataFields!)
-          AliceCallListRow(name: '   • ${field.name}:', value: field.value),
+        for (final VmLogApiFormDataField field in formDataFields!)
+          VmLogApiCallListRow(name: '   • ${field.name}:', value: field.value),
       ]);
     }
 
-    final List<AliceFormDataFile>? formDataFiles = call.request!.formDataFiles;
+    final List<VmLogApiFormDataFile>? formDataFiles = call.request!.formDataFiles;
     if (formDataFiles?.isNotEmpty ?? false) {
       rows.add(
-        AliceCallListRow(
-          name: context.i18n(AliceTranslationKey.callRequestFormDataFiles),
+        VmLogApiCallListRow(
+          name: context.i18n(VmLogApiTranslationKey.callRequestFormDataFiles),
           value: '',
         ),
       );
       rows.addAll([
-        for (final AliceFormDataFile file in formDataFiles!)
-          AliceCallListRow(
+        for (final VmLogApiFormDataFile file in formDataFiles!)
+          VmLogApiCallListRow(
             name: '   • ${file.fileName}:',
             value: '${file.contentType} / ${file.length} B',
           ),
@@ -79,17 +79,17 @@ class AliceCallRequestScreen extends StatelessWidget {
     final Map<String, dynamic>? headers = call.request?.headers;
     final String headersContent =
         headers?.isEmpty ?? true
-            ? context.i18n(AliceTranslationKey.callRequestHeadersEmpty)
+            ? context.i18n(VmLogApiTranslationKey.callRequestHeadersEmpty)
             : '';
     rows.add(
-      AliceCallListRow(
-        name: context.i18n(AliceTranslationKey.callRequestHeaders),
+      VmLogApiCallListRow(
+        name: context.i18n(VmLogApiTranslationKey.callRequestHeaders),
         value: headersContent,
       ),
     );
     rows.addAll([
       for (final MapEntry<String, dynamic> header in headers?.entries ?? [])
-        AliceCallListRow(
+        VmLogApiCallListRow(
           name: '   • ${header.key}:',
           value: header.value.toString(),
         ),
@@ -98,18 +98,18 @@ class AliceCallRequestScreen extends StatelessWidget {
     final Map<String, dynamic>? queryParameters = call.request?.queryParameters;
     final String queryParametersContent =
         queryParameters?.isEmpty ?? true
-            ? context.i18n(AliceTranslationKey.callRequestQueryParametersEmpty)
+            ? context.i18n(VmLogApiTranslationKey.callRequestQueryParametersEmpty)
             : '';
     rows.add(
-      AliceCallListRow(
-        name: context.i18n(AliceTranslationKey.callRequestQueryParameters),
+      VmLogApiCallListRow(
+        name: context.i18n(VmLogApiTranslationKey.callRequestQueryParameters),
         value: queryParametersContent,
       ),
     );
     rows.addAll([
       for (final MapEntry<String, dynamic> queryParam
           in queryParameters?.entries ?? [])
-        AliceCallListRow(
+        VmLogApiCallListRow(
           name: '   • ${queryParam.key}:',
           value: queryParam.value.toString(),
         ),
@@ -118,7 +118,7 @@ class AliceCallRequestScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(6),
       child: ScrollConfiguration(
-        behavior: AliceScrollBehavior(),
+        behavior: VmLogApiScrollBehavior(),
         child: ListView(children: rows),
       ),
     );
@@ -128,14 +128,14 @@ class AliceCallRequestScreen extends StatelessWidget {
   String _getBodyContent({required BuildContext context}) {
     final dynamic body = call.request?.body;
     return body != null
-        ? AliceParser.formatBody(
+        ? VmLogApiParser.formatBody(
           context: context,
           body: body,
-          contentType: AliceParser.getContentType(
+          contentType: VmLogApiParser.getContentType(
             context: context,
             headers: call.request?.headers,
           ),
         )
-        : context.i18n(AliceTranslationKey.callRequestBodyEmpty);
+        : context.i18n(VmLogApiTranslationKey.callRequestBodyEmpty);
   }
 }

@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 
 /// Definition of log data holder.
 @immutable
-class AliceLog with EquatableMixin {
-  AliceLog({
+class VmLogApiLog with EquatableMixin {
+  VmLogApiLog({
     required this.message,
     this.level = DiagnosticLevel.info,
     DateTime? timestamp,

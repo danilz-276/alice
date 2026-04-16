@@ -19,33 +19,33 @@ import 'package:vm_log_api/ui/common/vm_log_api_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 
-/// Page which displays list of calls caught by Alice. It displays tab view
+/// Page which displays list of calls caught by VmLogApi. It displays tab view
 /// where calls and logs can be inspected. It allows to sort calls, delete calls
 /// and search calls.
-class AliceCallsListPage extends StatefulWidget {
-  final AliceCore core;
+class VmLogApiCallsListPage extends StatefulWidget {
+  final VmLogApiCore core;
 
-  const AliceCallsListPage({required this.core, super.key});
+  const VmLogApiCallsListPage({required this.core, super.key});
 
   @override
-  State<AliceCallsListPage> createState() => _AliceCallsListPageState();
+  State<VmLogApiCallsListPage> createState() => _VmLogApiCallsListPageState();
 }
 
-class _AliceCallsListPageState extends State<AliceCallsListPage>
+class _VmLogApiCallsListPageState extends State<VmLogApiCallsListPage>
     with SingleTickerProviderStateMixin {
   final TextEditingController _queryTextEditingController =
       TextEditingController();
-  final List<AliceCallsListTabItem> _tabItems = AliceCallsListTabItem.values;
+  final List<VmLogApiCallsListTabItem> _tabItems = VmLogApiCallsListTabItem.values;
   final ScrollController _scrollController = ScrollController();
   late final TabController? _tabController;
 
-  AliceCallsListSortOption _sortOption = AliceCallsListSortOption.time;
+  VmLogApiCallsListSortOption _sortOption = VmLogApiCallsListSortOption.time;
   bool _sortAscending = false;
   bool _searchEnabled = false;
   bool isAndroidRawLogsEnabled = false;
   int _selectedIndex = 0;
 
-  AliceCore get aliceCore => widget.core;
+  VmLogApiCore get core => widget.core;
 
   @override
   void initState() {
@@ -78,8 +78,8 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
 
   @override
   Widget build(BuildContext context) {
-    return AlicePage(
-      core: aliceCore,
+    return VmLogApiPage(
+      core: core,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -92,7 +92,7 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
                     textEditingController: _queryTextEditingController,
                     onChanged: _updateSearchQuery,
                   )
-                  : Text(aliceCore.configuration.inspectorTitle),
+                  : Text(core.configuration.inspectorTitle),
           actions:
               isLoggerTab
                   ? <Widget>[
@@ -114,9 +114,9 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
                   ],
           bottom: TabBar(
             controller: _tabController,
-            indicatorColor: AliceTheme.lightRed,
+            indicatorColor: VmLogApiTheme.lightRed,
             tabs:
-                AliceCallsListTabItem.values.map((item) {
+                VmLogApiCallsListTabItem.values.map((item) {
                   return Tab(text: _getTabName(item: item));
                 }).toList(),
           ),
@@ -124,16 +124,16 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
         body: TabBarView(
           controller: _tabController,
           children: [
-            AliceInspectorScreen(
-              aliceCore: aliceCore,
+            VmLogApiInspectorScreen(
+              core: core,
               queryTextEditingController: _queryTextEditingController,
               sortOption: _sortOption,
               sortAscending: _sortAscending,
               onListItemPressed: _onListItemPressed,
             ),
-            AliceLogsScreen(
+            VmLogApiLogsScreen(
               scrollController: _scrollController,
-              aliceLogger: widget.core.configuration.aliceLogger,
+              logger: widget.core.configuration.logger,
               isAndroidRawLogsEnabled: isAndroidRawLogsEnabled,
             ),
           ],
@@ -147,12 +147,12 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
   }
 
   /// Get tab name based on [item] type.
-  String _getTabName({required AliceCallsListTabItem item}) {
+  String _getTabName({required VmLogApiCallsListTabItem item}) {
     switch (item) {
-      case AliceCallsListTabItem.inspector:
-        return context.i18n(AliceTranslationKey.callsListInspector);
-      case AliceCallsListTabItem.logger:
-        return context.i18n(AliceTranslationKey.callsListLogger);
+      case VmLogApiCallsListTabItem.inspector:
+        return context.i18n(VmLogApiTranslationKey.callsListInspector);
+      case VmLogApiCallsListTabItem.logger:
+        return context.i18n(VmLogApiTranslationKey.callsListLogger);
     }
   }
 
@@ -164,14 +164,14 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
 
   /// Called when clear logs has been pressed. It displays dialog and awaits for
   /// user confirmation.
-  void _onClearLogsPressed() => AliceGeneralDialog.show(
+  void _onClearLogsPressed() => VmLogApiGeneralDialog.show(
     context: context,
-    title: context.i18n(AliceTranslationKey.callsListDeleteLogsDialogTitle),
+    title: context.i18n(VmLogApiTranslationKey.callsListDeleteLogsDialogTitle),
     description: context.i18n(
-      AliceTranslationKey.callsListDeleteLogsDialogDescription,
+      VmLogApiTranslationKey.callsListDeleteLogsDialogDescription,
     ),
-    firstButtonTitle: context.i18n(AliceTranslationKey.callsListNo),
-    secondButtonTitle: context.i18n(AliceTranslationKey.callsListYes),
+    firstButtonTitle: context.i18n(VmLogApiTranslationKey.callsListNo),
+    secondButtonTitle: context.i18n(VmLogApiTranslationKey.callsListYes),
     secondButtonAction: _onLogsClearPressed,
   );
 
@@ -183,9 +183,9 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
   /// Called when logs clear button has been pressed.
   void _onLogsClearPressed() => setState(() {
     if (isAndroidRawLogsEnabled) {
-      widget.core.configuration.aliceLogger.clearAndroidRawLogs();
+      widget.core.configuration.logger.clearAndroidRawLogs();
     } else {
-      widget.core.configuration.aliceLogger.clearLogs();
+      widget.core.configuration.logger.clearLogs();
     }
   });
 
@@ -207,59 +207,63 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
   });
 
   /// Called when menu item from overflow menu has been pressed.
-  void _onMenuItemSelected(AliceCallDetailsMenuItemType menuItem) {
+  void _onMenuItemSelected(VmLogApiCallDetailsMenuItemType menuItem) {
     switch (menuItem) {
-      case AliceCallDetailsMenuItemType.sort:
+      case VmLogApiCallDetailsMenuItemType.sort:
         _onSortPressed();
-      case AliceCallDetailsMenuItemType.delete:
+      case VmLogApiCallDetailsMenuItemType.delete:
         _onRemovePressed();
-      case AliceCallDetailsMenuItemType.stats:
+      case VmLogApiCallDetailsMenuItemType.stats:
         _onStatsPressed();
-      case AliceCallDetailsMenuItemType.save:
+      case VmLogApiCallDetailsMenuItemType.save:
         _saveToFile();
     }
   }
 
   /// Called when item from the list has been pressed. It opens details page.
-  void _onListItemPressed(AliceHttpCall call) =>
-      AliceNavigation.navigateToCallDetails(call: call, core: aliceCore);
+  void _onListItemPressed(VmLogApiHttpCall call) =>
+      VmLogApiNavigation.navigateToCallDetails(
+        call: call,
+        core: core,
+        context: context,
+      );
 
   /// Called when remove all calls button has been pressed.
-  void _onRemovePressed() => AliceGeneralDialog.show(
+  void _onRemovePressed() => VmLogApiGeneralDialog.show(
     context: context,
-    title: context.i18n(AliceTranslationKey.callsListDeleteCallsDialogTitle),
+    title: context.i18n(VmLogApiTranslationKey.callsListDeleteCallsDialogTitle),
     description: context.i18n(
-      AliceTranslationKey.callsListDeleteCallsDialogDescription,
+      VmLogApiTranslationKey.callsListDeleteCallsDialogDescription,
     ),
-    firstButtonTitle: context.i18n(AliceTranslationKey.callsListNo),
+    firstButtonTitle: context.i18n(VmLogApiTranslationKey.callsListNo),
     firstButtonAction: () => <String, dynamic>{},
-    secondButtonTitle: context.i18n(AliceTranslationKey.callsListYes),
+    secondButtonTitle: context.i18n(VmLogApiTranslationKey.callsListYes),
     secondButtonAction: _removeCalls,
   );
 
-  /// Removes all calls from Alice.
-  void _removeCalls() => aliceCore.removeCalls();
+  /// Removes all calls from VmLogApi.
+  void _removeCalls() => core.removeCalls();
 
   /// Called when stats button has been pressed. Navigates to stats page.
   void _onStatsPressed() {
-    AliceNavigation.navigateToStats(core: aliceCore);
+    VmLogApiNavigation.navigateToStats(core: core, context: context);
   }
 
   /// Called when save to file has been pressed. It saves data to file.
   void _saveToFile() async {
     if (!mounted) return;
-    final result = await aliceCore.saveCallsToFile(context);
+    final result = await core.saveCallsToFile(context);
 
     if (result.success && result.path != null) {
-      AliceGeneralDialog.show(
+      VmLogApiGeneralDialog.show(
         context: context,
-        title: context.i18n(AliceTranslationKey.saveSuccessTitle),
+        title: context.i18n(VmLogApiTranslationKey.saveSuccessTitle),
         description: context
-            .i18n(AliceTranslationKey.saveSuccessDescription)
+            .i18n(VmLogApiTranslationKey.saveSuccessDescription)
             .replaceAll("[path]", result.path!),
         secondButtonTitle:
             OperatingSystem.isAndroid
-                ? context.i18n(AliceTranslationKey.saveSuccessView)
+                ? context.i18n(VmLogApiTranslationKey.saveSuccessView)
                 : null,
         secondButtonAction:
             () =>
@@ -267,30 +271,30 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
       );
     } else {
       final [String title, String description] = switch (result.error) {
-        AliceExportResultError.logGenerate => [
-          context.i18n(AliceTranslationKey.saveDialogPermissionErrorTitle),
+        VmLogApiExportResultError.logGenerate => [
+          context.i18n(VmLogApiTranslationKey.saveDialogPermissionErrorTitle),
           context.i18n(
-            AliceTranslationKey.saveDialogPermissionErrorDescription,
+            VmLogApiTranslationKey.saveDialogPermissionErrorDescription,
           ),
         ],
-        AliceExportResultError.empty => [
-          context.i18n(AliceTranslationKey.saveDialogEmptyErrorTitle),
-          context.i18n(AliceTranslationKey.saveDialogEmptyErrorDescription),
+        VmLogApiExportResultError.empty => [
+          context.i18n(VmLogApiTranslationKey.saveDialogEmptyErrorTitle),
+          context.i18n(VmLogApiTranslationKey.saveDialogEmptyErrorDescription),
         ],
-        AliceExportResultError.permission => [
-          context.i18n(AliceTranslationKey.saveDialogPermissionErrorTitle),
+        VmLogApiExportResultError.permission => [
+          context.i18n(VmLogApiTranslationKey.saveDialogPermissionErrorTitle),
           context.i18n(
-            AliceTranslationKey.saveDialogPermissionErrorDescription,
+            VmLogApiTranslationKey.saveDialogPermissionErrorDescription,
           ),
         ],
-        AliceExportResultError.file => [
-          context.i18n(AliceTranslationKey.saveDialogFileSaveErrorTitle),
-          context.i18n(AliceTranslationKey.saveDialogFileSaveErrorDescription),
+        VmLogApiExportResultError.file => [
+          context.i18n(VmLogApiTranslationKey.saveDialogFileSaveErrorTitle),
+          context.i18n(VmLogApiTranslationKey.saveDialogFileSaveErrorDescription),
         ],
         _ => ["", ""],
       };
 
-      AliceGeneralDialog.show(
+      VmLogApiGeneralDialog.show(
         context: context,
         title: title,
         description: description,
@@ -304,10 +308,10 @@ class _AliceCallsListPageState extends State<AliceCallsListPage>
   /// Called when sort button has been pressed. It opens dialog where filters
   /// can be picked.
   Future<void> _onSortPressed() async {
-    AliceSortDialogResult? result = await showDialog<AliceSortDialogResult>(
+    VmLogApiSortDialogResult? result = await showDialog<VmLogApiSortDialogResult>(
       context: context,
       builder:
-          (_) => AliceSortDialog(
+          (_) => VmLogApiSortDialog(
             sortOption: _sortOption,
             sortAscending: _sortAscending,
           ),
@@ -362,8 +366,8 @@ class _SearchTextField extends StatelessWidget {
       controller: textEditingController,
       autofocus: true,
       decoration: InputDecoration(
-        hintText: context.i18n(AliceTranslationKey.callsListSearchHint),
-        hintStyle: const TextStyle(fontSize: 16, color: AliceTheme.grey),
+        hintText: context.i18n(VmLogApiTranslationKey.callsListSearchHint),
+        hintStyle: const TextStyle(fontSize: 16, color: VmLogApiTheme.grey),
         border: InputBorder.none,
       ),
       style: const TextStyle(fontSize: 16),
@@ -377,21 +381,21 @@ class _SearchTextField extends StatelessWidget {
 class _ContextMenuButton extends StatelessWidget {
   const _ContextMenuButton({required this.onMenuItemSelected});
 
-  final void Function(AliceCallDetailsMenuItemType) onMenuItemSelected;
+  final void Function(VmLogApiCallDetailsMenuItemType) onMenuItemSelected;
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<AliceCallDetailsMenuItemType>(
+    return PopupMenuButton<VmLogApiCallDetailsMenuItemType>(
       onSelected: onMenuItemSelected,
       itemBuilder:
           (BuildContext context) => [
-            for (final AliceCallDetailsMenuItemType item
-                in AliceCallDetailsMenuItemType.values)
-              PopupMenuItem<AliceCallDetailsMenuItemType>(
+            for (final VmLogApiCallDetailsMenuItemType item
+                in VmLogApiCallDetailsMenuItemType.values)
+              PopupMenuItem<VmLogApiCallDetailsMenuItemType>(
                 value: item,
                 child: Row(
                   children: [
-                    Icon(_getIcon(itemType: item), color: AliceTheme.lightRed),
+                    Icon(_getIcon(itemType: item), color: VmLogApiTheme.lightRed),
                     const Padding(padding: EdgeInsets.only(left: 10)),
                     Text(_getTitle(context: context, itemType: item)),
                   ],
@@ -404,30 +408,30 @@ class _ContextMenuButton extends StatelessWidget {
   /// Get title of the menu item based on [itemType].
   String _getTitle({
     required BuildContext context,
-    required AliceCallDetailsMenuItemType itemType,
+    required VmLogApiCallDetailsMenuItemType itemType,
   }) {
     switch (itemType) {
-      case AliceCallDetailsMenuItemType.sort:
-        return context.i18n(AliceTranslationKey.callsListSort);
-      case AliceCallDetailsMenuItemType.delete:
-        return context.i18n(AliceTranslationKey.callsListDelete);
-      case AliceCallDetailsMenuItemType.stats:
-        return context.i18n(AliceTranslationKey.callsListStats);
-      case AliceCallDetailsMenuItemType.save:
-        return context.i18n(AliceTranslationKey.callsListSave);
+      case VmLogApiCallDetailsMenuItemType.sort:
+        return context.i18n(VmLogApiTranslationKey.callsListSort);
+      case VmLogApiCallDetailsMenuItemType.delete:
+        return context.i18n(VmLogApiTranslationKey.callsListDelete);
+      case VmLogApiCallDetailsMenuItemType.stats:
+        return context.i18n(VmLogApiTranslationKey.callsListStats);
+      case VmLogApiCallDetailsMenuItemType.save:
+        return context.i18n(VmLogApiTranslationKey.callsListSave);
     }
   }
 
   /// Get icon of the menu item based [itemType].
-  IconData _getIcon({required AliceCallDetailsMenuItemType itemType}) {
+  IconData _getIcon({required VmLogApiCallDetailsMenuItemType itemType}) {
     switch (itemType) {
-      case AliceCallDetailsMenuItemType.sort:
+      case VmLogApiCallDetailsMenuItemType.sort:
         return Icons.sort;
-      case AliceCallDetailsMenuItemType.delete:
+      case VmLogApiCallDetailsMenuItemType.delete:
         return Icons.delete;
-      case AliceCallDetailsMenuItemType.stats:
+      case VmLogApiCallDetailsMenuItemType.stats:
         return Icons.insert_chart;
-      case AliceCallDetailsMenuItemType.save:
+      case VmLogApiCallDetailsMenuItemType.save:
         return Icons.save;
     }
   }
@@ -446,16 +450,16 @@ class _LoggerFloatingActionButtons extends StatelessWidget {
       children: [
         FloatingActionButton(
           heroTag: 'h1',
-          backgroundColor: AliceTheme.lightRed,
+          backgroundColor: VmLogApiTheme.lightRed,
           onPressed: () => scrollLogsList(true),
-          child: const Icon(Icons.arrow_upward, color: AliceTheme.white),
+          child: const Icon(Icons.arrow_upward, color: VmLogApiTheme.white),
         ),
         const SizedBox(height: 8),
         FloatingActionButton(
           heroTag: 'h2',
-          backgroundColor: AliceTheme.lightRed,
+          backgroundColor: VmLogApiTheme.lightRed,
           onPressed: () => scrollLogsList(false),
-          child: const Icon(Icons.arrow_downward, color: AliceTheme.white),
+          child: const Icon(Icons.arrow_downward, color: VmLogApiTheme.white),
         ),
       ],
     );

@@ -5,8 +5,8 @@ import 'package:equatable/equatable.dart';
 
 /// Definition of http calls data holder.
 // ignore: must_be_immutable
-class AliceHttpCall with EquatableMixin {
-  AliceHttpCall(this.id);
+class VmLogApiHttpCall with EquatableMixin {
+  VmLogApiHttpCall(this.id);
 
   final int id;
   final DateTime createdTime = DateTime.now();
@@ -19,9 +19,9 @@ class AliceHttpCall with EquatableMixin {
   String uri = '';
   int duration = 0;
 
-  AliceHttpRequest? request;
-  AliceHttpResponse? response;
-  AliceHttpError? error;
+  VmLogApiHttpRequest? request;
+  VmLogApiHttpResponse? response;
+  VmLogApiHttpError? error;
 
   @override
   List<Object?> get props => [

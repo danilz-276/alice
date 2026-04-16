@@ -3,8 +3,8 @@ import 'package:vm_log_api/ui/common/vm_log_api_context_ext.dart';
 import 'package:vm_log_api/ui/common/vm_log_api_theme.dart';
 import 'package:flutter/material.dart';
 
-/// General dialogs used in Alice.
-class AliceGeneralDialog {
+/// General dialogs used in VmLogApi.
+class VmLogApiGeneralDialog {
   /// Helper method used to open alarm with given title and description.
   static Future<void> show({
     required BuildContext context,
@@ -18,7 +18,7 @@ class AliceGeneralDialog {
     context: context,
     builder: (BuildContext context) {
       return Theme(
-        data: AliceTheme.getTheme(),
+        data: VmLogApiTheme.getTheme(),
         child: AlertDialog(
           title: Text(title),
           content: Text(description),
@@ -30,7 +30,7 @@ class AliceGeneralDialog {
                 Navigator.of(context).pop();
               },
               child: Text(
-                firstButtonTitle ?? context.i18n(AliceTranslationKey.accept),
+                firstButtonTitle ?? context.i18n(VmLogApiTranslationKey.accept),
               ),
             ),
             if (secondButtonTitle != null)

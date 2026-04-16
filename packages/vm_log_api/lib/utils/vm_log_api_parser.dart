@@ -5,7 +5,7 @@ import 'package:vm_log_api/ui/common/vm_log_api_context_ext.dart';
 import 'package:flutter/material.dart';
 
 /// Body parser helper used to parsing body data.
-class AliceParser {
+class VmLogApiParser {
   static const String _jsonContentTypeSmall = 'content-type';
   static const String _jsonContentTypeBig = 'Content-Type';
   static const String _stream = 'Stream';
@@ -40,11 +40,11 @@ class AliceParser {
   }) {
     try {
       if (body == null) {
-        return context.i18n(AliceTranslationKey.callRequestBodyEmpty);
+        return context.i18n(VmLogApiTranslationKey.callRequestBodyEmpty);
       }
 
       String bodyContent = context.i18n(
-        AliceTranslationKey.callRequestBodyEmpty,
+        VmLogApiTranslationKey.callRequestBodyEmpty,
       );
 
       if (contentType == null ||
@@ -74,7 +74,7 @@ class AliceParser {
 
       return bodyContent;
     } catch (_) {
-      return context.i18n(AliceTranslationKey.parserFailed) + body.toString();
+      return context.i18n(VmLogApiTranslationKey.parserFailed) + body.toString();
     }
   }
 
@@ -92,7 +92,7 @@ class AliceParser {
         return headers[_jsonContentTypeBig];
       }
     }
-    return context.i18n(AliceTranslationKey.unknown);
+    return context.i18n(VmLogApiTranslationKey.unknown);
   }
 
   /// Parses headers from [dynamic] to [Map<String,String>], if possible.

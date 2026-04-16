@@ -11,12 +11,12 @@ import 'package:test/scaffolding.dart';
 import '../mock/mocked_data.dart';
 
 void main() {
-  late AliceMemoryStorage storage;
+  late VmLogApiMemoryStorage storage;
   setUp(() {
-    storage = AliceMemoryStorage(maxCallsCount: 1000);
+    storage = VmLogApiMemoryStorage(maxCallsCount: 1000);
   });
 
-  group("AliceMemoryStorage", () {
+  group("VmLogApiMemoryStorage", () {
     test("should return HTTP call stats", () {
       expect(storage.getStats(), (
         total: 0,
@@ -61,23 +61,23 @@ void main() {
     });
 
     test("should save HTTP calls", () {
-      final httpCall = AliceHttpCall(1);
-      httpCall.request = AliceHttpRequest();
-      httpCall.response = AliceHttpResponse();
+      final httpCall = VmLogApiHttpCall(1);
+      httpCall.request = VmLogApiHttpRequest();
+      httpCall.response = VmLogApiHttpResponse();
 
       storage.addCall(httpCall);
       expect(storage.getCalls(), [httpCall]);
 
-      final anotherHttpCall = AliceHttpCall(1);
-      anotherHttpCall.request = AliceHttpRequest();
-      anotherHttpCall.response = AliceHttpResponse();
+      final anotherHttpCall = VmLogApiHttpCall(1);
+      anotherHttpCall.request = VmLogApiHttpRequest();
+      anotherHttpCall.response = VmLogApiHttpResponse();
 
       storage.addCall(anotherHttpCall);
       expect(storage.getCalls(), [httpCall, anotherHttpCall]);
     });
 
     test("should replace HTTP call if over limit", () {
-      storage = AliceMemoryStorage(maxCallsCount: 2);
+      storage = VmLogApiMemoryStorage(maxCallsCount: 2);
       final firstCall = MockedData.getLoadingHttpCall();
       final secondCall = MockedData.getLoadingHttpCall();
       final thirdCall = MockedData.getLoadingHttpCall();
@@ -91,7 +91,7 @@ void main() {
 
     test("should add error to HTTP call", () {
       final call = MockedData.getLoadingHttpCall();
-      final error = AliceHttpError()..error = "Some error";
+      final error = VmLogApiHttpError()..error = "Some error";
 
       storage.addCall(call);
       storage.addError(error, call.id);
@@ -101,7 +101,7 @@ void main() {
 
     test("should not add error to HTTP call if HTTP has been not found", () {
       final call = MockedData.getLoadingHttpCall();
-      final error = AliceHttpError()..error = "Some error";
+      final error = VmLogApiHttpError()..error = "Some error";
 
       storage.addCall(call);
       storage.addError(error, 100);
@@ -111,7 +111,7 @@ void main() {
 
     test("should add response to HTTP call", () {
       final call = MockedData.getLoadingHttpCall();
-      final response = AliceHttpResponse();
+      final response = VmLogApiHttpResponse();
 
       storage.addCall(call);
       storage.addResponse(response, call.id);
@@ -124,7 +124,7 @@ void main() {
 
     test("should not add response to HTTP call if HTTP has been not found", () {
       final call = MockedData.getLoadingHttpCall();
-      final response = AliceHttpResponse();
+      final response = VmLogApiHttpResponse();
 
       storage.addCall(call);
       storage.addResponse(response, 100);

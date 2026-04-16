@@ -3,20 +3,20 @@ import 'package:vm_log_api/model/vm_log_api_translation.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("AliceTranslations", () {
+  group("VmLogApiTranslations", () {
     test("should return translated value", () {
       expect(
-        AliceTranslations.get(
+        VmLogApiTranslations.get(
           languageCode: "en",
-          key: AliceTranslationKey.saveLogId,
+          key: VmLogApiTranslationKey.saveLogId,
         ),
         "Id:",
       );
 
       expect(
-        AliceTranslations.get(
+        VmLogApiTranslations.get(
           languageCode: "en",
-          key: AliceTranslationKey.logsEmpty,
+          key: VmLogApiTranslationKey.logsEmpty,
         ),
         "There are no logs to show",
       );
@@ -26,17 +26,17 @@ void main() {
       "should return english translation when there's no translation found",
       () {
         expect(
-          AliceTranslations.get(
+          VmLogApiTranslations.get(
             languageCode: "xx",
-            key: AliceTranslationKey.saveLogId,
+            key: VmLogApiTranslationKey.saveLogId,
           ),
           "Id:",
         );
 
         expect(
-          AliceTranslations.get(
+          VmLogApiTranslations.get(
             languageCode: "xx",
-            key: AliceTranslationKey.logsEmpty,
+            key: VmLogApiTranslationKey.logsEmpty,
           ),
           "There are no logs to show",
         );
@@ -45,17 +45,17 @@ void main() {
 
     test("should return translated key for other languages", () {
       expect(
-        AliceTranslations.get(
+        VmLogApiTranslations.get(
           languageCode: "pl",
-          key: AliceTranslationKey.logsEmpty,
+          key: VmLogApiTranslationKey.logsEmpty,
         ),
         "Brak rezultatów",
       );
 
       expect(
-        AliceTranslations.get(
+        VmLogApiTranslations.get(
           languageCode: "pl",
-          key: AliceTranslationKey.saveLogRequest,
+          key: VmLogApiTranslationKey.saveLogRequest,
         ),
         "Żądanie",
       );

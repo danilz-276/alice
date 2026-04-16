@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Line of texts used in stats.
-class AliceStatsRow extends StatelessWidget {
-  const AliceStatsRow(this.label, this.value, {super.key});
+class VmLogApiStatsRow extends StatelessWidget {
+  const VmLogApiStatsRow(this.label, this.value, {super.key});
 
   final String label;
   final String value;

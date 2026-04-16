@@ -12,17 +12,17 @@ import 'mock/mocked_data.dart';
 void main() {
   group("vm-log-api", () {
     late VmLogApi alice;
-    late AliceStorage aliceStorage;
-    late AliceLogger aliceLogger;
+    late VmLogApiStorage storage;
+    late VmLogApiLogger logger;
     setUp(() {
-      aliceStorage = AliceMemoryStorage(maxCallsCount: 1000);
-      aliceLogger = AliceLogger(maximumSize: 1000);
+      storage = VmLogApiMemoryStorage(maxCallsCount: 1000);
+      logger = VmLogApiLogger(maximumSize: 1000);
       alice = VmLogApi(
-        configuration: AliceConfiguration(
+        configuration: VmLogApiConfiguration(
           showInspectorOnShake: false,
           showNotification: false,
-          logger: aliceLogger,
-          storage: aliceStorage,
+          logger: logger,
+          storage: storage,
         ),
       );
     });
@@ -38,19 +38,19 @@ void main() {
     });
 
     test("should add log", () {
-      final log = AliceLog(message: "test");
+      final log = VmLogApiLog(message: "test");
 
       alice.addLog(log);
 
-      expect(aliceLogger.logs, [log]);
+      expect(logger.logs, [log]);
     });
 
     test("should add logs", () {
-      final logs = [AliceLog(message: "test 1"), AliceLog(message: "test 2")];
+      final logs = [VmLogApiLog(message: "test 1"), VmLogApiLog(message: "test 2")];
 
       alice.addLogs(logs);
 
-      expect(aliceLogger.logs, logs);
+      expect(logger.logs, logs);
     });
 
     test("should add call", () {
@@ -58,7 +58,7 @@ void main() {
 
       alice.addHttpCall(call);
 
-      expect(aliceStorage.getCalls(), [call]);
+      expect(storage.getCalls(), [call]);
     });
 
     test("should add adapter", () {
@@ -68,7 +68,7 @@ void main() {
 
       adapter.addCallLog(call);
 
-      expect(aliceStorage.getCalls(), [call]);
+      expect(storage.getCalls(), [call]);
     });
 
     test("should return is inspector opened flag", () {
@@ -77,8 +77,8 @@ void main() {
   });
 }
 
-class FakeAdapter with AliceAdapter {
-  void addCallLog(AliceHttpCall call) {
-    aliceCore.addCall(call);
+class FakeAdapter with VmLogApiAdapter {
+  void addCallLog(VmLogApiHttpCall call) {
+    core.addCall(call);
   }
 }

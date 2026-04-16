@@ -1,16 +1,16 @@
 /// Definition of translations for specific locale
-class AliceTranslationData {
+class VmLogApiTranslationData {
   /// Language code of locale, i.e (en_US) => en.
   final String languageCode;
 
   /// Translation values for language
-  final Map<AliceTranslationKey, String> values;
+  final Map<VmLogApiTranslationKey, String> values;
 
-  AliceTranslationData({required this.languageCode, required this.values});
+  VmLogApiTranslationData({required this.languageCode, required this.values});
 }
 
 /// Definition of all available translation keys.
-enum AliceTranslationKey {
+enum VmLogApiTranslationKey {
   alice,
   callDetails,
   emailSubject,

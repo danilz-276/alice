@@ -7,14 +7,14 @@ import 'package:vm_log_api/model/vm_log_api_translation.dart';
 import 'package:vm_log_api/ui/common/vm_log_api_context_ext.dart';
 
 /// Helper for displaying local notifications.
-class AliceNotification {
+class VmLogApiNotification {
   static const String _defaultTitle = 'vm-log-api';
   static const String _callCount = '[callCount]';
 
   /// Notification plugin instance
   FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;
 
-  /// Notification configuration for Alice.
+  /// Notification configuration for VmLogApi.
   late final NotificationDetails _notificationDetails;
 
   /// Notification title and channel id/name.
@@ -104,23 +104,23 @@ class AliceNotification {
   /// Formats [stats] for notification message.
   String _getNotificationMessage({
     required BuildContext context,
-    required AliceStats stats,
+    required VmLogApiStats stats,
   }) => <String>[
     if (stats.loading > 0)
-      '${context.i18n(AliceTranslationKey.notificationLoading)} ${stats.loading}',
+      '${context.i18n(VmLogApiTranslationKey.notificationLoading)} ${stats.loading}',
     if (stats.successes > 0)
-      '${context.i18n(AliceTranslationKey.notificationSuccess)} ${stats.successes}',
+      '${context.i18n(VmLogApiTranslationKey.notificationSuccess)} ${stats.successes}',
     if (stats.redirects > 0)
-      '${context.i18n(AliceTranslationKey.notificationRedirect)} ${stats.redirects}',
+      '${context.i18n(VmLogApiTranslationKey.notificationRedirect)} ${stats.redirects}',
     if (stats.errors > 0)
-      '${context.i18n(AliceTranslationKey.notificationError)} ${stats.errors}',
+      '${context.i18n(VmLogApiTranslationKey.notificationError)} ${stats.errors}',
   ].join(' | ');
 
   /// Shows current stats notification. It formats [stats] into simple
   /// notification which is displayed when stats has changed.
   Future<void> showStatsNotification({
     required BuildContext context,
-    required AliceStats stats,
+    required VmLogApiStats stats,
   }) async {
     try {
       if (_isNotificationProcessing) {
@@ -136,7 +136,7 @@ class AliceNotification {
       await _flutterLocalNotificationsPlugin?.show(
         id: 0,
         title: context
-            .i18n(AliceTranslationKey.notificationTotalRequests)
+            .i18n(VmLogApiTranslationKey.notificationTotalRequests)
             .replaceAll(_callCount, stats.total.toString()),
         body: message,
         notificationDetails: _notificationDetails,
@@ -145,7 +145,7 @@ class AliceNotification {
 
       _notificationMessageDisplayed = message;
     } catch (error) {
-      AliceUtils.log(error.toString());
+      VmLogApiUtils.log(error.toString());
     } finally {
       _isNotificationProcessing = false;
     }

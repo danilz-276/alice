@@ -12,11 +12,11 @@ import 'package:vm_log_api/utils/vm_log_api_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-class VmLogApiDioAdapter extends InterceptorsWrapper with AliceAdapter {
+class VmLogApiDioAdapter extends InterceptorsWrapper with VmLogApiAdapter {
   /// Handles dio request and creates vm-log-api http call based on it
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final call = AliceHttpCall(options.hashCode);
+    final call = VmLogApiHttpCall(options.hashCode);
 
     final uri = options.uri;
     call.method = options.method;
@@ -34,7 +34,7 @@ class VmLogApiDioAdapter extends InterceptorsWrapper with AliceAdapter {
       call.secure = true;
     }
 
-    final request = AliceHttpRequest();
+    final request = VmLogApiHttpRequest();
 
     final dynamic data = options.data;
     if (data == null) {
@@ -47,18 +47,18 @@ class VmLogApiDioAdapter extends InterceptorsWrapper with AliceAdapter {
         request.body += 'Form data';
 
         if (data.fields.isNotEmpty == true) {
-          final fields = <AliceFormDataField>[];
+          final fields = <VmLogApiFormDataField>[];
           for (var entry in data.fields) {
-            fields.add(AliceFormDataField(entry.key, entry.value));
+            fields.add(VmLogApiFormDataField(entry.key, entry.value));
           }
           request.formDataFields = fields;
         }
 
         if (data.files.isNotEmpty == true) {
-          final files = <AliceFormDataFile>[];
+          final files = <VmLogApiFormDataFile>[];
           for (var entry in data.files) {
             files.add(
-              AliceFormDataFile(
+              VmLogApiFormDataFile(
                 entry.value.filename,
                 entry.value.contentType.toString(),
                 entry.value.length,
@@ -77,15 +77,15 @@ class VmLogApiDioAdapter extends InterceptorsWrapper with AliceAdapter {
 
     request
       ..time = DateTime.now()
-      ..headers = AliceParser.parseHeaders(headers: options.headers)
+      ..headers = VmLogApiParser.parseHeaders(headers: options.headers)
       ..contentType = options.contentType.toString()
       ..queryParameters = uri.queryParameters;
 
     call
       ..request = request
-      ..response = AliceHttpResponse();
+      ..response = VmLogApiHttpResponse();
 
-    aliceCore.addCall(call);
+    core.addCall(call);
     handler.next(options);
   }
 
@@ -95,7 +95,7 @@ class VmLogApiDioAdapter extends InterceptorsWrapper with AliceAdapter {
     Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) {
-    final httpResponse = AliceHttpResponse()..status = response.statusCode;
+    final httpResponse = VmLogApiHttpResponse()..status = response.statusCode;
 
     if (response.data == null) {
       httpResponse
@@ -114,24 +114,24 @@ class VmLogApiDioAdapter extends InterceptorsWrapper with AliceAdapter {
     });
     httpResponse.headers = headers;
 
-    aliceCore.addResponse(httpResponse, response.requestOptions.hashCode);
+    core.addResponse(httpResponse, response.requestOptions.hashCode);
     handler.next(response);
   }
 
   /// Handles error and adds data to vm-log-api http call
   @override
   void onError(DioException error, ErrorInterceptorHandler handler) {
-    final httpError = AliceHttpError()..error = error.toString();
+    final httpError = VmLogApiHttpError()..error = error.toString();
     if (error is Error) {
       final basicError = error as Error;
       httpError.stackTrace = basicError.stackTrace;
     }
 
-    aliceCore.addError(httpError, error.requestOptions.hashCode);
-    final httpResponse = AliceHttpResponse()..time = DateTime.now();
+    core.addError(httpError, error.requestOptions.hashCode);
+    final httpResponse = VmLogApiHttpResponse()..time = DateTime.now();
     if (error.response == null) {
       httpResponse.status = -1;
-      aliceCore.addResponse(httpResponse, error.requestOptions.hashCode);
+      core.addResponse(httpResponse, error.requestOptions.hashCode);
     } else {
       httpResponse.status = error.response!.statusCode;
 
@@ -149,12 +149,12 @@ class VmLogApiDioAdapter extends InterceptorsWrapper with AliceAdapter {
         headers[header] = values.toString();
       });
       httpResponse.headers = headers;
-      aliceCore.addResponse(
+      core.addResponse(
         httpResponse,
         error.response!.requestOptions.hashCode,
       );
-      aliceCore.addLog(
-        AliceLog(
+      core.addLog(
+        VmLogApiLog(
           message: error.toString(),
           level: DiagnosticLevel.error,
           error: error,
@@ -165,6 +165,3 @@ class VmLogApiDioAdapter extends InterceptorsWrapper with AliceAdapter {
     handler.next(error);
   }
 }
-
-@Deprecated('Use VmLogApiDioAdapter instead')
-class AliceDioAdapter extends VmLogApiDioAdapter {}

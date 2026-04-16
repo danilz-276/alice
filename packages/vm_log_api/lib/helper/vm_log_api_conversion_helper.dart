@@ -1,5 +1,5 @@
 /// Helper used in unit conversion.
-class AliceConversionHelper {
+class VmLogApiConversionHelper {
   static const int _kilobyteAsByte = 1000;
   static const int _megabyteAsByte = 1000000;
   static const int _secondAsMillisecond = 1000;

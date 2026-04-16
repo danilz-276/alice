@@ -7,27 +7,27 @@ import 'package:flutter/material.dart';
 
 /// Screen which is hosted in calls list page. It displays HTTP calls. It allows
 /// to search call and sort items based on provided criteria.
-class AliceInspectorScreen extends StatefulWidget {
-  const AliceInspectorScreen({
+class VmLogApiInspectorScreen extends StatefulWidget {
+  const VmLogApiInspectorScreen({
     super.key,
-    required this.aliceCore,
+    required this.core,
     required this.queryTextEditingController,
     required this.sortOption,
     required this.sortAscending,
     required this.onListItemPressed,
   });
 
-  final AliceCore aliceCore;
+  final VmLogApiCore core;
   final TextEditingController queryTextEditingController;
-  final AliceCallsListSortOption sortOption;
+  final VmLogApiCallsListSortOption sortOption;
   final bool sortAscending;
-  final void Function(AliceHttpCall) onListItemPressed;
+  final void Function(VmLogApiHttpCall) onListItemPressed;
 
   @override
-  State<AliceInspectorScreen> createState() => _AliceInspectorScreenState();
+  State<VmLogApiInspectorScreen> createState() => _VmLogApiInspectorScreenState();
 }
 
-class _AliceInspectorScreenState extends State<AliceInspectorScreen>
+class _VmLogApiInspectorScreenState extends State<VmLogApiInspectorScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -36,28 +36,28 @@ class _AliceInspectorScreenState extends State<AliceInspectorScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return StreamBuilder<List<AliceHttpCall>>(
-      stream: widget.aliceCore.callsStream,
-      builder: (context, AsyncSnapshot<List<AliceHttpCall>> snapshot) {
-        final List<AliceHttpCall> calls = List<AliceHttpCall>.from(
-          snapshot.data ?? <AliceHttpCall>[],
+    return StreamBuilder<List<VmLogApiHttpCall>>(
+      stream: widget.core.callsStream,
+      builder: (context, AsyncSnapshot<List<VmLogApiHttpCall>> snapshot) {
+        final List<VmLogApiHttpCall> calls = List<VmLogApiHttpCall>.from(
+          snapshot.data ?? <VmLogApiHttpCall>[],
         );
         final String query = widget.queryTextEditingController.text.trim();
         if (query.isNotEmpty) {
           calls.removeWhere(
-            (AliceHttpCall call) =>
+            (VmLogApiHttpCall call) =>
                 !call.endpoint.toLowerCase().contains(query.toLowerCase()),
           );
         }
         if (calls.isNotEmpty) {
-          return AliceCallsListScreen(
+          return VmLogApiCallsListScreen(
             calls: calls,
             sortOption: widget.sortOption,
             sortAscending: widget.sortAscending,
             onListItemClicked: widget.onListItemPressed,
           );
         } else {
-          return const AliceEmptyLogsWidget();
+          return const VmLogApiEmptyLogsWidget();
         }
       },
     );

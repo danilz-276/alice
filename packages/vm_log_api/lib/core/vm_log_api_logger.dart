@@ -5,24 +5,24 @@ import 'package:vm_log_api/model/vm_log_api_log.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Logger used to handle logs from application.
-class AliceLogger {
+class VmLogApiLogger {
   /// Maximum logs size. If 0, logs will be not rotated.
   final int maximumSize;
 
   /// Subject which keeps logs.
-  final BehaviorSubject<List<AliceLog>> _logsSubject;
+  final BehaviorSubject<List<VmLogApiLog>> _logsSubject;
 
-  AliceLogger({required this.maximumSize})
+  VmLogApiLogger({required this.maximumSize})
     : _logsSubject = BehaviorSubject.seeded([]);
 
   /// Getter of stream of logs
-  Stream<List<AliceLog>> get logsStream => _logsSubject.stream;
+  Stream<List<VmLogApiLog>> get logsStream => _logsSubject.stream;
 
   /// Getter of all logs
-  List<AliceLog> get logs => _logsSubject.value;
+  List<VmLogApiLog> get logs => _logsSubject.value;
 
   /// Adds all logs.
-  void addAll(Iterable<AliceLog> logs) {
+  void addAll(Iterable<VmLogApiLog> logs) {
     for (var log in logs) {
       add(log);
     }
@@ -30,7 +30,7 @@ class AliceLogger {
 
   /// Add one log. It sorts logs after adding new element. If [maximumSize] is
   /// set and max size is reached, first log will be deleted.
-  void add(AliceLog log) {
+  void add(VmLogApiLog log) {
     final values = _logsSubject.value;
     final count = values.length;
     if (maximumSize > 0 && count >= maximumSize) {

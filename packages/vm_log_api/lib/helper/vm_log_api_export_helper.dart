@@ -18,25 +18,25 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
-class AliceExportHelper {
+class VmLogApiExportHelper {
   static const JsonEncoder _encoder = JsonEncoder.withIndent('  ');
   static const String _fileName = "vm_log_api_log";
 
   /// Format log based on [call] and tries to share it.
-  static Future<AliceExportResult> shareCall({
+  static Future<VmLogApiExportResult> shareCall({
     required BuildContext context,
-    required AliceHttpCall call,
+    required VmLogApiHttpCall call,
   }) async {
     try {
-      final callLog = await AliceExportHelper.buildFullCallLog(
+      final callLog = await VmLogApiExportHelper.buildFullCallLog(
         call: call,
         context: context,
       );
 
       if (callLog == null) {
-        return AliceExportResult(
+        return VmLogApiExportResult(
           success: false,
-          error: AliceExportResultError.logGenerate,
+          error: VmLogApiExportResultError.logGenerate,
         );
       }
 
@@ -45,17 +45,17 @@ class AliceExportHelper {
       await SharePlus.instance.share(
         ShareParams(
           text: callLog,
-          subject: context.i18n(AliceTranslationKey.emailSubject),
+          subject: context.i18n(VmLogApiTranslationKey.emailSubject),
           sharePositionOrigin: sharePositionOrigin,
         ),
       );
 
-      return AliceExportResult(success: true);
+      return VmLogApiExportResult(success: true);
     } catch (exception) {
-      AliceUtils.log("Failed to share call log: $exception");
-      return AliceExportResult(
+      VmLogApiUtils.log("Failed to share call log: $exception");
+      return VmLogApiExportResult(
         success: false,
-        error: AliceExportResultError.logGenerate,
+        error: VmLogApiExportResultError.logGenerate,
       );
     }
   }
@@ -75,17 +75,17 @@ class AliceExportHelper {
   }
 
   /// Format log based on [calls] and saves it to file.
-  static Future<AliceExportResult> saveCallsToFile(
+  static Future<VmLogApiExportResult> saveCallsToFile(
     BuildContext context,
-    List<AliceHttpCall> calls,
+    List<VmLogApiHttpCall> calls,
   ) async {
     final bool permissionStatus = await _getPermissionStatus();
     if (!permissionStatus) {
       final bool status = await _requestPermission();
       if (!status) {
-        return AliceExportResult(
+        return VmLogApiExportResult(
           success: false,
-          error: AliceExportResultError.permission,
+          error: VmLogApiExportResultError.permission,
         );
       }
     }
@@ -115,15 +115,15 @@ class AliceExportHelper {
 
   /// Saves [calls] to file. For android it uses external storage directory and
   /// for ios it uses application documents directory.
-  static Future<AliceExportResult> _saveToFile(
+  static Future<VmLogApiExportResult> _saveToFile(
     BuildContext context,
-    List<AliceHttpCall> calls,
+    List<VmLogApiHttpCall> calls,
   ) async {
     try {
       if (calls.isEmpty) {
-        return AliceExportResult(
+        return VmLogApiExportResult(
           success: false,
-          error: AliceExportResultError.empty,
+          error: VmLogApiExportResultError.empty,
         );
       }
 
@@ -132,102 +132,102 @@ class AliceExportHelper {
           '${_fileName}_${DateTime.now().millisecondsSinceEpoch}.txt';
       final File file = File('${externalDir.path}/$fileName')..createSync();
       final IOSink sink = file.openWrite(mode: FileMode.append)
-        ..write(await _buildAliceLog(context: context));
-      for (final AliceHttpCall call in calls) {
+        ..write(await _buildVmLogApiHeaderLog(context: context));
+      for (final VmLogApiHttpCall call in calls) {
         sink.write(_buildCallLog(context: context, call: call));
       }
       await sink.flush();
       await sink.close();
 
-      return AliceExportResult(success: true, path: file.path);
+      return VmLogApiExportResult(success: true, path: file.path);
     } catch (exception) {
-      AliceUtils.log(exception.toString());
-      return AliceExportResult(
+      VmLogApiUtils.log(exception.toString());
+      return VmLogApiExportResult(
         success: false,
-        error: AliceExportResultError.file,
+        error: VmLogApiExportResultError.file,
       );
     }
   }
 
   /// Builds log string based on data collected from package info.
-  static Future<String> _buildAliceLog({required BuildContext context}) async {
+  static Future<String> _buildVmLogApiHeaderLog({required BuildContext context}) async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-    return '${context.i18n(AliceTranslationKey.saveHeaderTitle)}\n'
-        '${context.i18n(AliceTranslationKey.saveHeaderAppName)}  ${packageInfo.appName}\n'
-        '${context.i18n(AliceTranslationKey.saveHeaderPackage)} ${packageInfo.packageName}\n'
-        '${context.i18n(AliceTranslationKey.saveHeaderTitle)} ${packageInfo.version}\n'
-        '${context.i18n(AliceTranslationKey.saveHeaderBuildNumber)} ${packageInfo.buildNumber}\n'
-        '${context.i18n(AliceTranslationKey.saveHeaderGenerated)} ${DateTime.now().toIso8601String()}\n'
+    return '${context.i18n(VmLogApiTranslationKey.saveHeaderTitle)}\n'
+        '${context.i18n(VmLogApiTranslationKey.saveHeaderAppName)}  ${packageInfo.appName}\n'
+        '${context.i18n(VmLogApiTranslationKey.saveHeaderPackage)} ${packageInfo.packageName}\n'
+        '${context.i18n(VmLogApiTranslationKey.saveHeaderTitle)} ${packageInfo.version}\n'
+        '${context.i18n(VmLogApiTranslationKey.saveHeaderBuildNumber)} ${packageInfo.buildNumber}\n'
+        '${context.i18n(VmLogApiTranslationKey.saveHeaderGenerated)} ${DateTime.now().toIso8601String()}\n'
         '\n';
   }
 
   /// Build log string based on [call].
   static String _buildCallLog({
     required BuildContext context,
-    required AliceHttpCall call,
+    required VmLogApiHttpCall call,
   }) {
     final StringBuffer stringBuffer =
         StringBuffer()..writeAll([
           '===========================================\n',
-          '${context.i18n(AliceTranslationKey.saveLogId)} ${call.id}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogId)} ${call.id}\n',
           '============================================\n',
           '--------------------------------------------\n',
-          '${context.i18n(AliceTranslationKey.saveLogGeneralData)}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogGeneralData)}\n',
           '--------------------------------------------\n',
-          '${context.i18n(AliceTranslationKey.saveLogServer)} ${call.server} \n',
-          '${context.i18n(AliceTranslationKey.saveLogMethod)} ${call.method} \n',
-          '${context.i18n(AliceTranslationKey.saveLogEndpoint)} ${call.endpoint} \n',
-          '${context.i18n(AliceTranslationKey.saveLogClient)} ${call.client} \n',
-          '${context.i18n(AliceTranslationKey.saveLogDuration)} ${AliceConversionHelper.formatTime(call.duration)}\n',
-          '${context.i18n(AliceTranslationKey.saveLogSecured)} ${call.secure}\n',
-          '${context.i18n(AliceTranslationKey.saveLogCompleted)}: ${!call.loading} \n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogServer)} ${call.server} \n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogMethod)} ${call.method} \n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogEndpoint)} ${call.endpoint} \n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogClient)} ${call.client} \n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogDuration)} ${VmLogApiConversionHelper.formatTime(call.duration)}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogSecured)} ${call.secure}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogCompleted)}: ${!call.loading} \n',
           '--------------------------------------------\n',
-          '${context.i18n(AliceTranslationKey.saveLogRequest)}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogRequest)}\n',
           '--------------------------------------------\n',
-          '${context.i18n(AliceTranslationKey.saveLogRequestTime)} ${call.request?.time}\n',
-          '${context.i18n(AliceTranslationKey.saveLogRequestContentType)}: ${call.request?.contentType}\n',
-          '${context.i18n(AliceTranslationKey.saveLogRequestCookies)} ${_encoder.convert(call.request?.cookies)}\n',
-          '${context.i18n(AliceTranslationKey.saveLogRequestHeaders)} ${_encoder.convert(call.request?.headers)}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogRequestTime)} ${call.request?.time}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogRequestContentType)}: ${call.request?.contentType}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogRequestCookies)} ${_encoder.convert(call.request?.cookies)}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogRequestHeaders)} ${_encoder.convert(call.request?.headers)}\n',
         ]);
 
     if (call.request?.queryParameters.isNotEmpty ?? false) {
       stringBuffer.write(
-        '${context.i18n(AliceTranslationKey.saveLogRequestQueryParams)} ${_encoder.convert(call.request?.queryParameters)}\n',
+        '${context.i18n(VmLogApiTranslationKey.saveLogRequestQueryParams)} ${_encoder.convert(call.request?.queryParameters)}\n',
       );
     }
 
     stringBuffer.writeAll([
-      '${context.i18n(AliceTranslationKey.saveLogRequestSize)} ${AliceConversionHelper.formatBytes(call.request?.size ?? 0)}\n',
-      '${context.i18n(AliceTranslationKey.saveLogRequestBody)} ${AliceParser.formatBody(context: context, body: call.request?.body, contentType: call.request?.contentType)}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogRequestSize)} ${VmLogApiConversionHelper.formatBytes(call.request?.size ?? 0)}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogRequestBody)} ${VmLogApiParser.formatBody(context: context, body: call.request?.body, contentType: call.request?.contentType)}\n',
       '--------------------------------------------\n',
-      '${context.i18n(AliceTranslationKey.saveLogResponse)}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogResponse)}\n',
       '--------------------------------------------\n',
-      '${context.i18n(AliceTranslationKey.saveLogResponseTime)} ${call.response?.time}\n',
-      '${context.i18n(AliceTranslationKey.saveLogResponseStatus)} ${call.response?.status}\n',
-      '${context.i18n(AliceTranslationKey.saveLogResponseSize)} ${AliceConversionHelper.formatBytes(call.response?.size ?? 0)}\n',
-      '${context.i18n(AliceTranslationKey.saveLogResponseHeaders)} ${_encoder.convert(call.response?.headers)}\n',
-      '${context.i18n(AliceTranslationKey.saveLogResponseBody)} ${AliceParser.formatBody(context: context, body: call.response?.body, contentType: AliceParser.getContentType(context: context, headers: call.response?.headers))}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogResponseTime)} ${call.response?.time}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogResponseStatus)} ${call.response?.status}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogResponseSize)} ${VmLogApiConversionHelper.formatBytes(call.response?.size ?? 0)}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogResponseHeaders)} ${_encoder.convert(call.response?.headers)}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogResponseBody)} ${VmLogApiParser.formatBody(context: context, body: call.response?.body, contentType: VmLogApiParser.getContentType(context: context, headers: call.response?.headers))}\n',
     ]);
 
     if (call.error != null) {
       stringBuffer.writeAll([
         '--------------------------------------------\n',
-        '${context.i18n(AliceTranslationKey.saveLogError)}\n',
+        '${context.i18n(VmLogApiTranslationKey.saveLogError)}\n',
         '--------------------------------------------\n',
-        '${context.i18n(AliceTranslationKey.saveLogError)}: ${call.error?.error}\n',
+        '${context.i18n(VmLogApiTranslationKey.saveLogError)}: ${call.error?.error}\n',
       ]);
 
       if (call.error?.stackTrace != null) {
         stringBuffer.write(
-          '${context.i18n(AliceTranslationKey.saveLogStackTrace)}: ${call.error?.stackTrace}\n',
+          '${context.i18n(VmLogApiTranslationKey.saveLogStackTrace)}: ${call.error?.stackTrace}\n',
         );
       }
     }
 
     stringBuffer.writeAll([
       '--------------------------------------------\n',
-      '${context.i18n(AliceTranslationKey.saveLogCurl)}\n',
+      '${context.i18n(VmLogApiTranslationKey.saveLogCurl)}\n',
       '--------------------------------------------\n',
       Curl.getCurlCommand(call),
       '\n',
@@ -241,13 +241,13 @@ class AliceExportHelper {
   /// Builds full call log string (package info log and call log).
   static Future<String?> buildFullCallLog({
     required BuildContext context,
-    required AliceHttpCall call,
+    required VmLogApiHttpCall call,
   }) async {
     try {
-      return await _buildAliceLog(context: context) +
+      return await _buildVmLogApiHeaderLog(context: context) +
           _buildCallLog(call: call, context: context);
     } catch (exception) {
-      AliceUtils.log("Failed to generate call log: $exception");
+      VmLogApiUtils.log("Failed to generate call log: $exception");
       return null;
     }
   }

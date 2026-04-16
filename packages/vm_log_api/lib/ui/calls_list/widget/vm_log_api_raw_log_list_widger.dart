@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Widget which displays raw logs list (logs collected with ADB).
-class AliceRawLogListWidget extends StatelessWidget {
-  const AliceRawLogListWidget({
+class VmLogApiRawLogListWidget extends StatelessWidget {
+  const VmLogApiRawLogListWidget({
     required this.scrollController,
     required this.getRawLogs,
     super.key,
@@ -27,12 +27,12 @@ class AliceRawLogListWidget extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return const AliceErrorLogsWidget();
+          return const VmLogApiErrorLogsWidget();
         }
 
         final logs = snapshot.data ?? '';
         if (logs.isEmpty) {
-          return const AliceEmptyLogsWidget();
+          return const VmLogApiEmptyLogsWidget();
         }
 
         return Scrollbar(
@@ -69,7 +69,7 @@ class AliceRawLogListWidget extends StatelessWidget {
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.i18n(AliceTranslationKey.logsCopied))),
+        SnackBar(content: Text(context.i18n(VmLogApiTranslationKey.logsCopied))),
       );
     }
   }

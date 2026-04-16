@@ -7,59 +7,59 @@ import 'package:vm_log_api/ui/common/vm_log_api_scroll_behavior.dart';
 import 'package:flutter/material.dart';
 
 /// Screen which displays call overview data, for example method, server.
-class AliceCallOverviewScreen extends StatelessWidget {
-  final AliceHttpCall call;
+class VmLogApiCallOverviewScreen extends StatelessWidget {
+  final VmLogApiHttpCall call;
 
-  const AliceCallOverviewScreen({super.key, required this.call});
+  const VmLogApiCallOverviewScreen({super.key, required this.call});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(6),
       child: ScrollConfiguration(
-        behavior: AliceScrollBehavior(),
+        behavior: VmLogApiScrollBehavior(),
         child: ListView(
           children: [
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewMethod),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewMethod),
               value: call.method,
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewServer),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewServer),
               value: call.server,
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewEndpoint),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewEndpoint),
               value: call.endpoint,
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewStarted),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewStarted),
               value: call.request?.time.toString(),
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewFinished),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewFinished),
               value: call.response?.time.toString(),
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewDuration),
-              value: AliceConversionHelper.formatTime(call.duration),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewDuration),
+              value: VmLogApiConversionHelper.formatTime(call.duration),
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewBytesSent),
-              value: AliceConversionHelper.formatBytes(call.request?.size ?? 0),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewBytesSent),
+              value: VmLogApiConversionHelper.formatBytes(call.request?.size ?? 0),
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewBytesReceived),
-              value: AliceConversionHelper.formatBytes(
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewBytesReceived),
+              value: VmLogApiConversionHelper.formatBytes(
                 call.response?.size ?? 0,
               ),
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewClient),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewClient),
               value: call.client,
             ),
-            AliceCallListRow(
-              name: context.i18n(AliceTranslationKey.callOverviewSecure),
+            VmLogApiCallListRow(
+              name: context.i18n(VmLogApiTranslationKey.callOverviewSecure),
               value: call.secure.toString(),
             ),
           ],

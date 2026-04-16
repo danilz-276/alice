@@ -4,11 +4,11 @@ import 'package:vm_log_api/ui/calls_list/model/vm_log_api_calls_list_sort_option
 import 'package:vm_log_api/ui/common/vm_log_api_context_ext.dart';
 
 /// Dialog which can be used to sort alice calls.
-class AliceSortDialog extends StatelessWidget {
-  final AliceCallsListSortOption sortOption;
+class VmLogApiSortDialog extends StatelessWidget {
+  final VmLogApiCallsListSortOption sortOption;
   final bool sortAscending;
 
-  const AliceSortDialog({
+  const VmLogApiSortDialog({
     super.key,
     required this.sortOption,
     required this.sortAscending,
@@ -16,35 +16,43 @@ class AliceSortDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AliceCallsListSortOption currentSortOption = sortOption;
+    VmLogApiCallsListSortOption currentSortOption = sortOption;
     bool currentSortAscending = sortAscending;
     return Theme(
       data: ThemeData(brightness: Brightness.light),
       child: StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: Text(context.i18n(AliceTranslationKey.sortDialogTitle)),
+            title: Text(context.i18n(VmLogApiTranslationKey.sortDialogTitle)),
             content: Wrap(
               children: [
-                for (final AliceCallsListSortOption sortOption
-                    in AliceCallsListSortOption.values)
-                  RadioListTile<AliceCallsListSortOption>(
-                    title: Text(_getName(context: context, option: sortOption)),
-                    value: sortOption,
-                    groupValue: currentSortOption,
-                    onChanged: (AliceCallsListSortOption? value) {
-                      if (value != null) {
-                        setState(() {
-                          currentSortOption = value;
-                        });
-                      }
-                    },
+                RadioGroup<VmLogApiCallsListSortOption>(
+                  groupValue: currentSortOption,
+                  onChanged: (VmLogApiCallsListSortOption? value) {
+                    if (value != null) {
+                      setState(() {
+                        currentSortOption = value;
+                      });
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      for (final VmLogApiCallsListSortOption sortOption
+                          in VmLogApiCallsListSortOption.values)
+                        RadioListTile<VmLogApiCallsListSortOption>(
+                          title: Text(
+                            _getName(context: context, option: sortOption),
+                          ),
+                          value: sortOption,
+                        ),
+                    ],
                   ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      context.i18n(AliceTranslationKey.sortDialogDescending),
+                      context.i18n(VmLogApiTranslationKey.sortDialogDescending),
                     ),
                     Switch(
                       value: currentSortAscending,
@@ -56,7 +64,7 @@ class AliceSortDialog extends StatelessWidget {
                       activeTrackColor: Colors.grey,
                       activeThumbColor: Colors.white,
                     ),
-                    Text(context.i18n(AliceTranslationKey.sortDialogAscending)),
+                    Text(context.i18n(VmLogApiTranslationKey.sortDialogAscending)),
                   ],
                 ),
               ],
@@ -64,18 +72,18 @@ class AliceSortDialog extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: Navigator.of(context).pop,
-                child: Text(context.i18n(AliceTranslationKey.sortDialogCancel)),
+                child: Text(context.i18n(VmLogApiTranslationKey.sortDialogCancel)),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(
-                    AliceSortDialogResult(
+                    VmLogApiSortDialogResult(
                       sortOption: currentSortOption,
                       sortAscending: currentSortAscending,
                     ),
                   );
                 },
-                child: Text(context.i18n(AliceTranslationKey.sortDialogAccept)),
+                child: Text(context.i18n(VmLogApiTranslationKey.sortDialogAccept)),
               ),
             ],
           );
@@ -87,34 +95,34 @@ class AliceSortDialog extends StatelessWidget {
   /// Get sort option name based on [option].
   String _getName({
     required BuildContext context,
-    required AliceCallsListSortOption option,
+    required VmLogApiCallsListSortOption option,
   }) {
     return switch (option) {
-      AliceCallsListSortOption.time => context.i18n(
-        AliceTranslationKey.sortDialogTime,
+      VmLogApiCallsListSortOption.time => context.i18n(
+        VmLogApiTranslationKey.sortDialogTime,
       ),
-      AliceCallsListSortOption.responseTime => context.i18n(
-        AliceTranslationKey.sortDialogResponseTime,
+      VmLogApiCallsListSortOption.responseTime => context.i18n(
+        VmLogApiTranslationKey.sortDialogResponseTime,
       ),
-      AliceCallsListSortOption.responseCode => context.i18n(
-        AliceTranslationKey.sortDialogResponseCode,
+      VmLogApiCallsListSortOption.responseCode => context.i18n(
+        VmLogApiTranslationKey.sortDialogResponseCode,
       ),
-      AliceCallsListSortOption.responseSize => context.i18n(
-        AliceTranslationKey.sortDialogResponseSize,
+      VmLogApiCallsListSortOption.responseSize => context.i18n(
+        VmLogApiTranslationKey.sortDialogResponseSize,
       ),
-      AliceCallsListSortOption.endpoint => context.i18n(
-        AliceTranslationKey.sortDialogEndpoint,
+      VmLogApiCallsListSortOption.endpoint => context.i18n(
+        VmLogApiTranslationKey.sortDialogEndpoint,
       ),
     };
   }
 }
 
 /// Result of alice sort dialog.
-class AliceSortDialogResult {
-  final AliceCallsListSortOption sortOption;
+class VmLogApiSortDialogResult {
+  final VmLogApiCallsListSortOption sortOption;
   final bool sortAscending;
 
-  AliceSortDialogResult({
+  VmLogApiSortDialogResult({
     required this.sortOption,
     required this.sortAscending,
   });

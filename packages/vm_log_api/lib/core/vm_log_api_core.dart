@@ -15,29 +15,29 @@ import 'package:vm_log_api/ui/common/vm_log_api_navigation.dart';
 import 'package:vm_log_api/utils/shake_detector.dart';
 import 'package:flutter/material.dart';
 
-class AliceCore {
-  /// Configuration of Alice
-  late AliceConfiguration _configuration;
+class VmLogApiCore {
+  /// Configuration of VmLogApi
+  late VmLogApiConfiguration _configuration;
 
   /// Detector used to detect device shakes
   ShakeDetector? _shakeDetector;
 
   /// Helper used for notification management
-  AliceNotification? _notification;
+  VmLogApiNotification? _notification;
 
   /// Subscription for call changes
-  StreamSubscription<List<AliceHttpCall>>? _callsSubscription;
+  StreamSubscription<List<VmLogApiHttpCall>>? _callsSubscription;
 
   /// Flag used to determine whether is inspector opened
   bool _isInspectorOpened = false;
 
   /// Creates alice core instance
-  AliceCore({required AliceConfiguration configuration}) {
+  VmLogApiCore({required VmLogApiConfiguration configuration}) {
     _configuration = configuration;
     _subscribeToCallChanges();
     if (_configuration.showNotification &&
         !_configuration.openInspectorOnHttpCall) {
-      _notification = AliceNotification();
+      _notification = VmLogApiNotification();
       _notification?.configure(
         notificationIcon: _configuration.notificationIcon,
         title: _configuration.inspectorTitle,
@@ -55,7 +55,7 @@ class AliceCore {
   }
 
   /// Returns current configuration
-  AliceConfiguration get configuration => _configuration;
+  VmLogApiConfiguration get configuration => _configuration;
 
   /// Set custom navigation key. This will help if there's route library.
   void setNavigatorKey(GlobalKey<NavigatorState> navigatorKey) {
@@ -69,13 +69,13 @@ class AliceCore {
   }
 
   /// Called when calls has been updated
-  Future<void> _onCallsChanged(List<AliceHttpCall>? calls) async {
+  Future<void> _onCallsChanged(List<VmLogApiHttpCall>? calls) async {
     if (calls != null && calls.isNotEmpty) {
       if (_configuration.openInspectorOnHttpCall) {
         await navigateToCallListScreen();
         return;
       }
-      final AliceStats stats = _configuration.aliceStorage.getStats();
+      final VmLogApiStats stats = _configuration.storage.getStats();
       _notification?.showStatsNotification(
         context: getContext()!,
         stats: stats,
@@ -88,7 +88,7 @@ class AliceCore {
   Future<void> navigateToCallListScreen() async {
     final BuildContext? context = getContext();
     if (context == null) {
-      AliceUtils.log(
+      VmLogApiUtils.log(
         'Cant start vm-log-api HTTP Inspector. Please add NavigatorKey to your '
         'application',
       );
@@ -96,7 +96,7 @@ class AliceCore {
     }
     if (!_isInspectorOpened) {
       _isInspectorOpened = true;
-      await AliceNavigation.navigateToCallsList(core: this);
+      await VmLogApiNavigation.navigateToCallsList(core: this);
       _isInspectorOpened = false;
     }
   }
@@ -106,51 +106,51 @@ class AliceCore {
       _configuration.navigatorKey?.currentState?.overlay?.context;
 
   /// Add alice http call to calls subject
-  FutureOr<void> addCall(AliceHttpCall call) =>
-      _configuration.aliceStorage.addCall(call);
+  FutureOr<void> addCall(VmLogApiHttpCall call) =>
+      _configuration.storage.addCall(call);
 
   /// Add error to existing alice http call
-  FutureOr<void> addError(AliceHttpError error, int requestId) =>
-      _configuration.aliceStorage.addError(error, requestId);
+  FutureOr<void> addError(VmLogApiHttpError error, int requestId) =>
+      _configuration.storage.addError(error, requestId);
 
   /// Add response to existing alice http call
-  FutureOr<void> addResponse(AliceHttpResponse response, int requestId) =>
-      _configuration.aliceStorage.addResponse(response, requestId);
+  FutureOr<void> addResponse(VmLogApiHttpResponse response, int requestId) =>
+      _configuration.storage.addResponse(response, requestId);
 
   /// Remove all calls from calls subject
-  FutureOr<void> removeCalls() => _configuration.aliceStorage.removeCalls();
+  FutureOr<void> removeCalls() => _configuration.storage.removeCalls();
 
   /// Selects call with given [requestId]. It may return null.
   @protected
-  AliceHttpCall? selectCall(int requestId) =>
-      _configuration.aliceStorage.selectCall(requestId);
+  VmLogApiHttpCall? selectCall(int requestId) =>
+      _configuration.storage.selectCall(requestId);
 
   /// Returns stream which returns list of HTTP calls
-  Stream<List<AliceHttpCall>> get callsStream =>
-      _configuration.aliceStorage.callsStream;
+  Stream<List<VmLogApiHttpCall>> get callsStream =>
+      _configuration.storage.callsStream;
 
   /// Returns all stored HTTP calls.
-  List<AliceHttpCall> getCalls() => _configuration.aliceStorage.getCalls();
+  List<VmLogApiHttpCall> getCalls() => _configuration.storage.getCalls();
 
   /// Save all calls to file.
-  Future<AliceExportResult> saveCallsToFile(BuildContext context) =>
-      AliceExportHelper.saveCallsToFile(
+  Future<VmLogApiExportResult> saveCallsToFile(BuildContext context) =>
+      VmLogApiExportHelper.saveCallsToFile(
         context,
-        _configuration.aliceStorage.getCalls(),
+        _configuration.storage.getCalls(),
       );
 
-  /// Adds new log to Alice logger.
-  void addLog(AliceLog log) => _configuration.aliceLogger.add(log);
+  /// Adds new log to VmLogApi logger.
+  void addLog(VmLogApiLog log) => _configuration.logger.add(log);
 
-  /// Adds list of logs to Alice logger
-  void addLogs(List<AliceLog> logs) => _configuration.aliceLogger.addAll(logs);
+  /// Adds list of logs to VmLogApi logger
+  void addLogs(List<VmLogApiLog> logs) => _configuration.logger.addAll(logs);
 
   /// Returns flag which determines whether inspector is opened
   bool get isInspectorOpened => _isInspectorOpened;
 
   /// Subscribes to storage for call changes.
   void _subscribeToCallChanges() {
-    _callsSubscription = _configuration.aliceStorage.callsStream.listen(
+    _callsSubscription = _configuration.storage.callsStream.listen(
       _onCallsChanged,
     );
   }

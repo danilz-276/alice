@@ -3,38 +3,38 @@ import 'package:vm_log_api/model/vm_log_api_http_request.dart';
 import 'package:vm_log_api/model/vm_log_api_http_response.dart';
 
 class MockedData {
-  static AliceHttpCall getHttpCallWithResponseStatus({
+  static VmLogApiHttpCall getHttpCallWithResponseStatus({
     required int statusCode,
   }) {
-    final httpCall = AliceHttpCall(DateTime.now().millisecondsSinceEpoch)
+    final httpCall = VmLogApiHttpCall(DateTime.now().millisecondsSinceEpoch)
       ..loading = false;
-    httpCall.request = AliceHttpRequest();
-    httpCall.response = AliceHttpResponse()..status = statusCode;
+    httpCall.request = VmLogApiHttpRequest();
+    httpCall.response = VmLogApiHttpResponse()..status = statusCode;
     return httpCall;
   }
 
-  static AliceHttpCall getLoadingHttpCall() {
-    final httpCall = AliceHttpCall(DateTime.now().millisecondsSinceEpoch);
+  static VmLogApiHttpCall getLoadingHttpCall() {
+    final httpCall = VmLogApiHttpCall(DateTime.now().millisecondsSinceEpoch);
     return httpCall;
   }
 
-  static AliceHttpCall getHttpCall({required int id}) {
-    final httpCall = AliceHttpCall(id);
+  static VmLogApiHttpCall getHttpCall({required int id}) {
+    final httpCall = VmLogApiHttpCall(id);
     return httpCall;
   }
 
-  static AliceHttpCall getFilledHttpCall() =>
-      AliceHttpCall(DateTime.now().microsecondsSinceEpoch)
+  static VmLogApiHttpCall getFilledHttpCall() =>
+      VmLogApiHttpCall(DateTime.now().microsecondsSinceEpoch)
         ..loading = false
         ..request =
-            (AliceHttpRequest()
+            (VmLogApiHttpRequest()
               ..headers = {}
               ..body = '{"id": 0}'
               ..contentType = "application/json"
               ..size = 0
               ..time = DateTime.now())
         ..response =
-            (AliceHttpResponse()
+            (VmLogApiHttpResponse()
               ..headers = {}
               ..body = '{"id": 0}'
               ..size = 0

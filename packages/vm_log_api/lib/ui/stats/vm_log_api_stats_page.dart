@@ -9,92 +9,92 @@ import 'package:vm_log_api/utils/num_comparison.dart';
 import 'package:flutter/material.dart';
 
 /// General stats page for currently caught HTTP calls.
-class AliceStatsPage extends StatelessWidget {
-  final AliceCore aliceCore;
+class VmLogApiStatsPage extends StatelessWidget {
+  final VmLogApiCore core;
 
-  const AliceStatsPage(this.aliceCore, {super.key});
+  const VmLogApiStatsPage(this.core, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AlicePage(
-      core: aliceCore,
+    return VmLogApiPage(
+      core: core,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            '${context.i18n(AliceTranslationKey.alice)} - '
-            '${context.i18n(AliceTranslationKey.statsTitle)}',
+            '${context.i18n(VmLogApiTranslationKey.alice)} - '
+            '${context.i18n(VmLogApiTranslationKey.statsTitle)}',
           ),
         ),
         body: Container(
           padding: const EdgeInsets.all(8),
           child: ListView(
             children: [
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsTotalRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsTotalRequests),
                 '${_getTotalRequests()}',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsPendingRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsPendingRequests),
                 '${_getPendingRequests()}',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsSuccessRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsSuccessRequests),
                 '${_getSuccessRequests()}',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsRedirectionRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsRedirectionRequests),
                 '${_getRedirectionRequests()}',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsErrorRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsErrorRequests),
                 '${_getErrorRequests()}',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsBytesSent),
-                AliceConversionHelper.formatBytes(_getBytesSent()),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsBytesSent),
+                VmLogApiConversionHelper.formatBytes(_getBytesSent()),
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsBytesReceived),
-                AliceConversionHelper.formatBytes(_getBytesReceived()),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsBytesReceived),
+                VmLogApiConversionHelper.formatBytes(_getBytesReceived()),
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsAverageRequestTime),
-                AliceConversionHelper.formatTime(_getAverageRequestTime()),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsAverageRequestTime),
+                VmLogApiConversionHelper.formatTime(_getAverageRequestTime()),
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsMaxRequestTime),
-                AliceConversionHelper.formatTime(_getMaxRequestTime()),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsMaxRequestTime),
+                VmLogApiConversionHelper.formatTime(_getMaxRequestTime()),
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsMinRequestTime),
-                AliceConversionHelper.formatTime(_getMinRequestTime()),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsMinRequestTime),
+                VmLogApiConversionHelper.formatTime(_getMinRequestTime()),
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsGetRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsGetRequests),
                 '${_getRequests('GET')} ',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsPostRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsPostRequests),
                 '${_getRequests('POST')} ',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsDeleteRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsDeleteRequests),
                 '${_getRequests('DELETE')} ',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsPutRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsPutRequests),
                 '${_getRequests('PUT')} ',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsPatchRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsPatchRequests),
                 '${_getRequests('PATCH')} ',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsSecuredRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsSecuredRequests),
                 '${_getSecuredRequests()}',
               ),
-              AliceStatsRow(
-                context.i18n(AliceTranslationKey.statsUnsecuredRequests),
+              VmLogApiStatsRow(
+                context.i18n(VmLogApiTranslationKey.statsUnsecuredRequests),
                 '${_getUnsecuredRequests()}',
               ),
             ],
@@ -111,7 +111,7 @@ class AliceStatsPage extends StatelessWidget {
   int _getSuccessRequests() =>
       _calls
           .where(
-            (AliceHttpCall call) =>
+            (VmLogApiHttpCall call) =>
                 (call.response?.status.gte(200) ?? false) &&
                 (call.response?.status.lt(300) ?? false),
           )
@@ -122,7 +122,7 @@ class AliceStatsPage extends StatelessWidget {
   int _getRedirectionRequests() =>
       _calls
           .where(
-            (AliceHttpCall call) =>
+            (VmLogApiHttpCall call) =>
                 (call.response?.status.gte(300) ?? false) &&
                 (call.response?.status.lt(400) ?? false),
           )
@@ -133,7 +133,7 @@ class AliceStatsPage extends StatelessWidget {
   int _getErrorRequests() =>
       _calls
           .where(
-            (AliceHttpCall call) =>
+            (VmLogApiHttpCall call) =>
                 (call.response?.status.gte(400) ?? false) &&
                     (call.response?.status.lt(600) ?? false) ||
                 const [-1, 0].contains(call.response?.status),
@@ -143,25 +143,25 @@ class AliceStatsPage extends StatelessWidget {
 
   /// Returns count of pending requests.
   int _getPendingRequests() =>
-      _calls.where((AliceHttpCall call) => call.loading).toList().length;
+      _calls.where((VmLogApiHttpCall call) => call.loading).toList().length;
 
   /// Returns total bytes sent count.
   int _getBytesSent() => _calls.fold(
     0,
-    (int sum, AliceHttpCall call) => sum + (call.request?.size ?? 0),
+    (int sum, VmLogApiHttpCall call) => sum + (call.request?.size ?? 0),
   );
 
   /// Returns total bytes received count.
   int _getBytesReceived() => _calls.fold(
     0,
-    (int sum, AliceHttpCall call) => sum + (call.response?.size ?? 0),
+    (int sum, VmLogApiHttpCall call) => sum + (call.response?.size ?? 0),
   );
 
   /// Returns average request time of all calls.
   int _getAverageRequestTime() {
     int requestTimeSum = 0;
     int requestsWithDurationCount = 0;
-    for (final AliceHttpCall call in _calls) {
+    for (final VmLogApiHttpCall call in _calls) {
       if (call.duration != 0) {
         requestTimeSum = call.duration;
         requestsWithDurationCount++;
@@ -176,7 +176,7 @@ class AliceStatsPage extends StatelessWidget {
   /// Returns max request time of all calls.
   int _getMaxRequestTime() {
     int maxRequestTime = 0;
-    for (final AliceHttpCall call in _calls) {
+    for (final VmLogApiHttpCall call in _calls) {
       if (call.duration > maxRequestTime) {
         maxRequestTime = call.duration;
       }
@@ -190,7 +190,7 @@ class AliceStatsPage extends StatelessWidget {
     if (_calls.isEmpty) {
       minRequestTime = 0;
     } else {
-      for (final AliceHttpCall call in _calls) {
+      for (final VmLogApiHttpCall call in _calls) {
         if (call.duration != 0 && call.duration < minRequestTime) {
           minRequestTime = call.duration;
         }
@@ -211,6 +211,6 @@ class AliceStatsPage extends StatelessWidget {
   int _getUnsecuredRequests() =>
       _calls.where((call) => !call.secure).toList().length;
 
-  /// Get all calls from Alice.
-  List<AliceHttpCall> get _calls => aliceCore.getCalls();
+  /// Get all calls from VmLogApi.
+  List<VmLogApiHttpCall> get _calls => core.getCalls();
 }

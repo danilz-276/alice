@@ -1,2 +1,2 @@
 /// Definition of tabs used in call details page.
-enum AliceCallDetailsTabItem { overview, request, response, error }
+enum VmLogApiCallDetailsTabItem { overview, request, response, error }

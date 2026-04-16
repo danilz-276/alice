@@ -4,7 +4,7 @@ import 'package:vm_log_api/model/vm_log_api_http_call.dart';
 
 class Curl {
   /// Builds Curl command based on [call] instance.
-  static String getCurlCommand(AliceHttpCall call) {
+  static String getCurlCommand(VmLogApiHttpCall call) {
     bool compressed = false;
     final StringBuffer curlCmd = StringBuffer('curl');
 

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 /// Definition of http error data holder.
 // ignore: must_be_immutable
-class AliceHttpError with EquatableMixin {
+class VmLogApiHttpError with EquatableMixin {
   dynamic error;
   StackTrace? stackTrace;
 

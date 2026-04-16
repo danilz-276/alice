@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-/// All definitions for theming Alice.
-class AliceTheme {
+/// All definitions for theming VmLogApi.
+class VmLogApiTheme {
   static const Color red = Color(0xffff3f34);
   static const Color lightRed = Color(0xffff5e57);
   static const Color green = Color(0xff05c46b);
@@ -14,7 +14,7 @@ class AliceTheme {
   static ThemeData getTheme() {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: AliceTheme._getColorScheme(),
+      colorScheme: VmLogApiTheme._getColorScheme(),
       dividerColor: Colors.transparent,
       buttonTheme: const ButtonThemeData(
         buttonColor: lightRed,
@@ -31,8 +31,8 @@ class AliceTheme {
   /// Returns color scheme based on dark mode.
   static ColorScheme _getColorScheme() =>
       _isDarkMode
-          ? const ColorScheme.dark(primary: AliceTheme.lightRed)
-          : const ColorScheme.light(primary: AliceTheme.lightRed);
+          ? const ColorScheme.dark(primary: VmLogApiTheme.lightRed)
+          : const ColorScheme.light(primary: VmLogApiTheme.lightRed);
 
   /// Return log text color based on diagnostic [level].
   static Color getLogTextColor(BuildContext context, DiagnosticLevel level) =>

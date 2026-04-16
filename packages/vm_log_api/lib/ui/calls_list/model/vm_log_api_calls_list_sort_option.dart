@@ -1,5 +1,5 @@
 ///Available sort options in inspector UI.
-enum AliceCallsListSortOption {
+enum VmLogApiCallsListSortOption {
   time,
   responseTime,
   responseCode,

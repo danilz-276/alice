@@ -17,11 +17,11 @@ void main() {
     context = BuildContextMock();
   });
 
-  group("AliceExportHelper", () {
+  group("VmLogApiExportHelper", () {
     test("should build correct call log", () async {
       _setPackageInfo();
 
-      final result = await AliceExportHelper.buildFullCallLog(
+      final result = await VmLogApiExportHelper.buildFullCallLog(
         context: context,
         call: MockedData.getFilledHttpCall(),
       );
@@ -34,7 +34,7 @@ void main() {
       _setPathProvider();
       _setDefaultTargetPlatform();
 
-      final result = await AliceExportHelper.saveCallsToFile(context, [
+      final result = await VmLogApiExportHelper.saveCallsToFile(context, [
         MockedData.getFilledHttpCall(),
       ]);
       expect(result.success, true);
@@ -55,11 +55,11 @@ void main() {
     _setPathProvider();
     _setDefaultTargetPlatform();
 
-    final result = await AliceExportHelper.saveCallsToFile(context, []);
+    final result = await VmLogApiExportHelper.saveCallsToFile(context, []);
 
     expect(result.success, false);
     expect(result.path, null);
-    expect(result.error, AliceExportResultError.empty);
+    expect(result.error, VmLogApiExportResultError.empty);
   });
 
   test("should not save call log to file if file problem occurs", () async {
@@ -68,13 +68,13 @@ void main() {
     _setPathProvider(isFailing: true);
     _setDefaultTargetPlatform();
 
-    final result = await AliceExportHelper.saveCallsToFile(context, [
+    final result = await VmLogApiExportHelper.saveCallsToFile(context, [
       MockedData.getFilledHttpCall(),
     ]);
 
     expect(result.success, false);
     expect(result.path, null);
-    expect(result.error, AliceExportResultError.file);
+    expect(result.error, VmLogApiExportResultError.file);
   });
 
   test("should share call log", () async {
@@ -82,7 +82,7 @@ void main() {
     _setPackageInfo();
     _setShare();
 
-    final result = await AliceExportHelper.shareCall(
+    final result = await VmLogApiExportHelper.shareCall(
       context: context,
       call: MockedData.getFilledHttpCall(),
     );
@@ -93,47 +93,47 @@ void main() {
 
 void _verifyLogLines(String result) {
   var lines = [
-    'AliceTranslationKey.saveHeaderTitle',
-    'AliceTranslationKey.saveHeaderAppName  Alice',
-    'AliceTranslationKey.saveHeaderPackage pl.hasoft.alice',
-    'AliceTranslationKey.saveHeaderTitle 1.0',
-    'AliceTranslationKey.saveHeaderBuildNumber 1',
-    'AliceTranslationKey.saveHeaderGenerated',
+    'VmLogApiTranslationKey.saveHeaderTitle',
+    'VmLogApiTranslationKey.saveHeaderAppName  VmLogApi',
+    'VmLogApiTranslationKey.saveHeaderPackage pl.hasoft.alice',
+    'VmLogApiTranslationKey.saveHeaderTitle 1.0',
+    'VmLogApiTranslationKey.saveHeaderBuildNumber 1',
+    'VmLogApiTranslationKey.saveHeaderGenerated',
     '',
     '===========================================',
-    'AliceTranslationKey.saveLogId',
+    'VmLogApiTranslationKey.saveLogId',
     '============================================',
     '--------------------------------------------',
-    'AliceTranslationKey.saveLogGeneralData',
+    'VmLogApiTranslationKey.saveLogGeneralData',
     '--------------------------------------------',
-    'AliceTranslationKey.saveLogServer https://test.com ',
-    'AliceTranslationKey.saveLogMethod POST ',
-    'AliceTranslationKey.saveLogEndpoint /test ',
-    'AliceTranslationKey.saveLogClient  ',
-    'AliceTranslationKey.saveLogDuration 0 ms',
-    'AliceTranslationKey.saveLogSecured true',
-    'AliceTranslationKey.saveLogCompleted: true ',
+    'VmLogApiTranslationKey.saveLogServer https://test.com ',
+    'VmLogApiTranslationKey.saveLogMethod POST ',
+    'VmLogApiTranslationKey.saveLogEndpoint /test ',
+    'VmLogApiTranslationKey.saveLogClient  ',
+    'VmLogApiTranslationKey.saveLogDuration 0 ms',
+    'VmLogApiTranslationKey.saveLogSecured true',
+    'VmLogApiTranslationKey.saveLogCompleted: true ',
     '--------------------------------------------',
-    'AliceTranslationKey.saveLogRequest',
+    'VmLogApiTranslationKey.saveLogRequest',
     '--------------------------------------------',
-    'AliceTranslationKey.saveLogRequestTime',
-    'AliceTranslationKey.saveLogRequestContentType: application/json',
-    'AliceTranslationKey.saveLogRequestCookies []',
-    'AliceTranslationKey.saveLogRequestHeaders {}',
-    'AliceTranslationKey.saveLogRequestSize 0 B',
-    'AliceTranslationKey.saveLogRequestBody {',
+    'VmLogApiTranslationKey.saveLogRequestTime',
+    'VmLogApiTranslationKey.saveLogRequestContentType: application/json',
+    'VmLogApiTranslationKey.saveLogRequestCookies []',
+    'VmLogApiTranslationKey.saveLogRequestHeaders {}',
+    'VmLogApiTranslationKey.saveLogRequestSize 0 B',
+    'VmLogApiTranslationKey.saveLogRequestBody {',
     '  "id": 0',
     '}',
     '--------------------------------------------',
-    'AliceTranslationKey.saveLogResponse',
+    'VmLogApiTranslationKey.saveLogResponse',
     '--------------------------------------------',
-    'AliceTranslationKey.saveLogResponseTime',
-    'AliceTranslationKey.saveLogResponseStatus 0',
-    'AliceTranslationKey.saveLogResponseSize 0 B',
-    'AliceTranslationKey.saveLogResponseHeaders {}',
-    'AliceTranslationKey.saveLogResponseBody {"id": 0}',
+    'VmLogApiTranslationKey.saveLogResponseTime',
+    'VmLogApiTranslationKey.saveLogResponseStatus 0',
+    'VmLogApiTranslationKey.saveLogResponseSize 0 B',
+    'VmLogApiTranslationKey.saveLogResponseHeaders {}',
+    'VmLogApiTranslationKey.saveLogResponseBody {"id": 0}',
     '--------------------------------------------',
-    'AliceTranslationKey.saveLogCurl',
+    'VmLogApiTranslationKey.saveLogCurl',
     '--------------------------------------------',
     'curl -X POST ',
     '==============================================',
@@ -146,7 +146,7 @@ void _verifyLogLines(String result) {
 
 void _setPackageInfo() {
   PackageInfo.setMockInitialValues(
-    appName: "Alice",
+    appName: "VmLogApi",
     packageName: "pl.hasoft.alice",
     version: "1.0",
     buildNumber: "1",

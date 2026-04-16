@@ -12,27 +12,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Widget which renders log list for calls list page.
-class AliceLogListWidget extends StatefulWidget {
-  const AliceLogListWidget({
+class VmLogApiLogListWidget extends StatefulWidget {
+  const VmLogApiLogListWidget({
     required this.logsStream,
     required this.scrollController,
     super.key,
   });
 
-  final Stream<List<AliceLog>>? logsStream;
+  final Stream<List<VmLogApiLog>>? logsStream;
   final ScrollController? scrollController;
 
   @override
-  State<AliceLogListWidget> createState() => _AliceLogListWidgetState();
+  State<VmLogApiLogListWidget> createState() => _VmLogApiLogListWidgetState();
 }
 
 /// State for logs list widget.
-class _AliceLogListWidgetState extends State<AliceLogListWidget> {
+class _VmLogApiLogListWidgetState extends State<VmLogApiLogListWidget> {
   final DiagnosticLevel _minLevel = DiagnosticLevel.debug;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<AliceLog>>(
+    return StreamBuilder<List<VmLogApiLog>>(
       stream: widget.logsStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.none ||
@@ -41,27 +41,27 @@ class _AliceLogListWidgetState extends State<AliceLogListWidget> {
         }
 
         if (snapshot.hasError) {
-          return const AliceErrorLogsWidget();
+          return const VmLogApiErrorLogsWidget();
         }
 
         final logs = snapshot.data ?? [];
         if (logs.isEmpty) {
-          return const AliceEmptyLogsWidget();
+          return const VmLogApiEmptyLogsWidget();
         }
 
-        final List<AliceLog> filteredLogs = [
-          for (final AliceLog log in logs)
+        final List<VmLogApiLog> filteredLogs = [
+          for (final VmLogApiLog log in logs)
             if (log.level.index >= _minLevel.index) log,
         ];
 
         return ScrollConfiguration(
-          behavior: AliceScrollBehavior(),
+          behavior: VmLogApiScrollBehavior(),
           child: ListView.builder(
             controller: widget.scrollController,
             shrinkWrap: true,
             padding: const EdgeInsets.symmetric(vertical: 8),
             itemCount: filteredLogs.length,
-            itemBuilder: (context, i) => _AliceLogEntryWidget(filteredLogs[i]),
+            itemBuilder: (context, i) => _VmLogApiLogEntryWidget(filteredLogs[i]),
           ),
         );
       },
@@ -70,10 +70,10 @@ class _AliceLogListWidgetState extends State<AliceLogListWidget> {
 }
 
 /// Widget which renders one log entry in logs list.
-class _AliceLogEntryWidget extends StatelessWidget {
-  _AliceLogEntryWidget(this.log) : super(key: ValueKey(log));
+class _VmLogApiLogEntryWidget extends StatelessWidget {
+  _VmLogApiLogEntryWidget(this.log) : super(key: ValueKey(log));
 
-  final AliceLog log;
+  final VmLogApiLog log;
 
   @override
   Widget build(BuildContext context) {
@@ -97,12 +97,12 @@ class _AliceLogEntryWidget extends StatelessWidget {
           TextSpan(text: ' ${log.message}'),
           ..._toText(
             context,
-            context.i18n(AliceTranslationKey.logsItemError),
+            context.i18n(VmLogApiTranslationKey.logsItemError),
             log.error,
           ),
           ..._toText(
             context,
-            context.i18n(AliceTranslationKey.logsItemStackTrace),
+            context.i18n(VmLogApiTranslationKey.logsItemStackTrace),
             log.stackTrace,
             addLineBreakAfterTitle: true,
           ),
@@ -148,7 +148,7 @@ class _AliceLogEntryWidget extends StatelessWidget {
 
   /// Returns text color based on log level.
   Color _getTextColor(BuildContext context) {
-    return AliceTheme.getLogTextColor(context, log.level);
+    return VmLogApiTheme.getLogTextColor(context, log.level);
   }
 
   /// Returns icon based on log level.
@@ -172,16 +172,16 @@ class _AliceLogEntryWidget extends StatelessWidget {
         StringBuffer()..writeAll([
           '${log.timestamp}: ${log.message}\n',
           if (error != null)
-            '${context.i18n(AliceTranslationKey.logsItemError)} $error\n',
+            '${context.i18n(VmLogApiTranslationKey.logsItemError)} $error\n',
           if (stackTrace != null)
-            '${context.i18n(AliceTranslationKey.logsItemStackTrace)}: $stackTrace\n',
+            '${context.i18n(VmLogApiTranslationKey.logsItemStackTrace)}: $stackTrace\n',
         ]);
 
     await Clipboard.setData(ClipboardData(text: text.toString()));
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.i18n(AliceTranslationKey.logsCopied))),
+        SnackBar(content: Text(context.i18n(VmLogApiTranslationKey.logsCopied))),
       );
     }
   }

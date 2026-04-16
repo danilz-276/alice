@@ -1,11 +1,11 @@
 /// Model of export result.
-class AliceExportResult {
+class VmLogApiExportResult {
   final bool success;
-  final AliceExportResultError? error;
+  final VmLogApiExportResultError? error;
   final String? path;
 
-  AliceExportResult({required this.success, this.error, this.path});
+  VmLogApiExportResult({required this.success, this.error, this.path});
 }
 
 /// Definition of all possible export errors.
-enum AliceExportResultError { logGenerate, empty, permission, file }
+enum VmLogApiExportResultError { logGenerate, empty, permission, file }

@@ -16,36 +16,36 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 
 /// Call details page which displays 4 tabs: overview, request, response, error.
-class AliceCallDetailsPage extends StatefulWidget {
-  final AliceHttpCall call;
-  final AliceCore core;
+class VmLogApiCallDetailsPage extends StatefulWidget {
+  final VmLogApiHttpCall call;
+  final VmLogApiCore core;
 
-  const AliceCallDetailsPage({
+  const VmLogApiCallDetailsPage({
     required this.call,
     required this.core,
     super.key,
   });
 
   @override
-  State<StatefulWidget> createState() => _AliceCallDetailsPageState();
+  State<StatefulWidget> createState() => _VmLogApiCallDetailsPageState();
 }
 
 /// State of call details page.
-class _AliceCallDetailsPageState extends State<AliceCallDetailsPage>
+class _VmLogApiCallDetailsPageState extends State<VmLogApiCallDetailsPage>
     with SingleTickerProviderStateMixin {
-  AliceHttpCall get call => widget.call;
+  VmLogApiHttpCall get call => widget.call;
 
   @override
   Widget build(BuildContext context) {
-    return AlicePage(
+    return VmLogApiPage(
       core: widget.core,
-      child: StreamBuilder<List<AliceHttpCall>>(
+      child: StreamBuilder<List<VmLogApiHttpCall>>(
         stream: widget.core.callsStream,
         initialData: [widget.call],
-        builder: (context, AsyncSnapshot<List<AliceHttpCall>> callsSnapshot) {
+        builder: (context, AsyncSnapshot<List<VmLogApiHttpCall>> callsSnapshot) {
           if (callsSnapshot.hasData && !callsSnapshot.hasError) {
-            final AliceHttpCall? call = callsSnapshot.data?.firstWhereOrNull(
-              (AliceHttpCall snapshotCall) => snapshotCall.id == widget.call.id,
+            final VmLogApiHttpCall? call = callsSnapshot.data?.firstWhereOrNull(
+              (VmLogApiHttpCall snapshotCall) => snapshotCall.id == widget.call.id,
             );
             if (call != null) {
               return DefaultTabController(
@@ -53,9 +53,9 @@ class _AliceCallDetailsPageState extends State<AliceCallDetailsPage>
                 child: Scaffold(
                   appBar: AppBar(
                     bottom: TabBar(
-                      indicatorColor: AliceTheme.lightRed,
+                      indicatorColor: VmLogApiTheme.lightRed,
                       tabs:
-                          AliceCallDetailsTabItem.values.map((item) {
+                          VmLogApiCallDetailsTabItem.values.map((item) {
                             return Tab(
                               icon: _getTabIcon(item: item),
                               text: _getTabName(item: item),
@@ -64,26 +64,26 @@ class _AliceCallDetailsPageState extends State<AliceCallDetailsPage>
                     ),
                     title: Text(
                       '${widget.core.configuration.inspectorTitle} -'
-                      ' ${context.i18n(AliceTranslationKey.callDetails)}',
+                      ' ${context.i18n(VmLogApiTranslationKey.callDetails)}',
                     ),
                   ),
                   body: TabBarView(
                     children: [
-                      AliceCallOverviewScreen(call: widget.call),
-                      AliceCallRequestScreen(call: widget.call),
-                      AliceCallResponseScreen(call: widget.call),
-                      AliceCallErrorScreen(call: widget.call),
+                      VmLogApiCallOverviewScreen(call: widget.call),
+                      VmLogApiCallRequestScreen(call: widget.call),
+                      VmLogApiCallResponseScreen(call: widget.call),
+                      VmLogApiCallErrorScreen(call: widget.call),
                     ],
                   ),
                   floatingActionButton:
                       widget.core.configuration.showShareButton
                           ? FloatingActionButton(
-                            backgroundColor: AliceTheme.lightRed,
+                            backgroundColor: VmLogApiTheme.lightRed,
                             key: const Key('share_key'),
                             onPressed: _shareCall,
                             child: const Icon(
                               Icons.share,
-                              color: AliceTheme.white,
+                              color: VmLogApiTheme.white,
                             ),
                           )
                           : null,
@@ -93,7 +93,7 @@ class _AliceCallDetailsPageState extends State<AliceCallDetailsPage>
           }
 
           return Center(
-            child: Text(context.i18n(AliceTranslationKey.callDetailsEmpty)),
+            child: Text(context.i18n(VmLogApiTranslationKey.callDetailsEmpty)),
           );
         },
       ),
@@ -103,33 +103,33 @@ class _AliceCallDetailsPageState extends State<AliceCallDetailsPage>
   /// Called when share button has been pressed. It encodes the [widget.call]
   /// and tries to invoke system action to share it.
   void _shareCall() async {
-    await AliceExportHelper.shareCall(context: context, call: widget.call);
+    await VmLogApiExportHelper.shareCall(context: context, call: widget.call);
   }
 
   /// Get tab name based on [item] type.
-  String _getTabName({required AliceCallDetailsTabItem item}) {
+  String _getTabName({required VmLogApiCallDetailsTabItem item}) {
     switch (item) {
-      case AliceCallDetailsTabItem.overview:
-        return context.i18n(AliceTranslationKey.callDetailsOverview);
-      case AliceCallDetailsTabItem.request:
-        return context.i18n(AliceTranslationKey.callDetailsRequest);
-      case AliceCallDetailsTabItem.response:
-        return context.i18n(AliceTranslationKey.callDetailsResponse);
-      case AliceCallDetailsTabItem.error:
-        return context.i18n(AliceTranslationKey.callDetailsError);
+      case VmLogApiCallDetailsTabItem.overview:
+        return context.i18n(VmLogApiTranslationKey.callDetailsOverview);
+      case VmLogApiCallDetailsTabItem.request:
+        return context.i18n(VmLogApiTranslationKey.callDetailsRequest);
+      case VmLogApiCallDetailsTabItem.response:
+        return context.i18n(VmLogApiTranslationKey.callDetailsResponse);
+      case VmLogApiCallDetailsTabItem.error:
+        return context.i18n(VmLogApiTranslationKey.callDetailsError);
     }
   }
 
   /// Get tab icon based on [item] type.
-  Icon _getTabIcon({required AliceCallDetailsTabItem item}) {
+  Icon _getTabIcon({required VmLogApiCallDetailsTabItem item}) {
     switch (item) {
-      case AliceCallDetailsTabItem.overview:
+      case VmLogApiCallDetailsTabItem.overview:
         return const Icon(Icons.info_outline);
-      case AliceCallDetailsTabItem.request:
+      case VmLogApiCallDetailsTabItem.request:
         return const Icon(Icons.arrow_upward);
-      case AliceCallDetailsTabItem.response:
+      case VmLogApiCallDetailsTabItem.response:
         return const Icon(Icons.arrow_downward);
-      case AliceCallDetailsTabItem.error:
+      case VmLogApiCallDetailsTabItem.error:
         return const Icon(Icons.warning);
     }
   }

@@ -4,8 +4,8 @@ import 'package:vm_log_api/ui/common/vm_log_api_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Widget which renders empty text for calls list.
-class AliceEmptyLogsWidget extends StatelessWidget {
-  const AliceEmptyLogsWidget({super.key});
+class VmLogApiEmptyLogsWidget extends StatelessWidget {
+  const VmLogApiEmptyLogsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +15,10 @@ class AliceEmptyLogsWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, color: AliceTheme.orange),
+            const Icon(Icons.error_outline, color: VmLogApiTheme.orange),
             const SizedBox(height: 6),
             Text(
-              context.i18n(AliceTranslationKey.logsEmpty),
+              context.i18n(VmLogApiTranslationKey.logsEmpty),
               style: const TextStyle(fontSize: 18),
             ),
           ],

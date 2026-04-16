@@ -9,14 +9,14 @@ import '../mock/build_context_mock.dart';
 void main() {
   late BuildContext context;
   setUp(() {
-    registerFallbackValue(AliceTranslationKey.accept);
+    registerFallbackValue(VmLogApiTranslationKey.accept);
     context = BuildContextMock();
   });
 
-  group("AliceBodyParser", () {
+  group("VmLogApiBodyParser", () {
     test("should parse json body and pretty print it", () {
       expect(
-        AliceParser.formatBody(
+        VmLogApiParser.formatBody(
           context: context,
           body: '{"id": 1, "name": "test}',
           contentType: "application/json",
@@ -26,19 +26,19 @@ void main() {
     });
 
     test("should parse unknown body", () {
-      expect(AliceParser.formatBody(context: context, body: 'test'), 'test');
+      expect(VmLogApiParser.formatBody(context: context, body: 'test'), 'test');
     });
 
     test("should parse empty body", () {
       expect(
-        AliceParser.formatBody(context: context, body: ''),
-        AliceTranslationKey.callRequestBodyEmpty.toString(),
+        VmLogApiParser.formatBody(context: context, body: ''),
+        VmLogApiTranslationKey.callRequestBodyEmpty.toString(),
       );
     });
 
     test("should parse application/json content type", () {
       expect(
-        AliceParser.getContentType(
+        VmLogApiParser.getContentType(
           context: context,
           headers: {'Content-Type': "application/json"},
         ),
@@ -46,7 +46,7 @@ void main() {
       );
 
       expect(
-        AliceParser.getContentType(
+        VmLogApiParser.getContentType(
           context: context,
           headers: {'content-type': "application/json"},
         ),
@@ -56,19 +56,19 @@ void main() {
 
     test("should parse unknown content type", () {
       expect(
-        AliceParser.getContentType(context: context, headers: {}),
-        AliceTranslationKey.unknown.toString(),
+        VmLogApiParser.getContentType(context: context, headers: {}),
+        VmLogApiTranslationKey.unknown.toString(),
       );
     });
 
     test("should parse headers", () {
-      expect(AliceParser.parseHeaders(headers: {"id": 0}), {"id": "0"});
-      expect(AliceParser.parseHeaders(headers: {"id": "0"}), {"id": "0"});
+      expect(VmLogApiParser.parseHeaders(headers: {"id": 0}), {"id": "0"});
+      expect(VmLogApiParser.parseHeaders(headers: {"id": "0"}), {"id": "0"});
     });
 
     test("should not parse headers", () {
       expect(
-        () => AliceParser.parseHeaders(headers: "test"),
+        () => VmLogApiParser.parseHeaders(headers: "test"),
         throwsArgumentError,
       );
     });

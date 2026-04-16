@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   int _requestSequence = 0;
   Timer? _pollingTimer;
 
-  final configuration = AliceConfiguration(
+  final configuration = VmLogApiConfiguration(
     showNotification: false,
     openInspectorOnHttpCall: false,
     inspectorPath: '/vm-log-api',

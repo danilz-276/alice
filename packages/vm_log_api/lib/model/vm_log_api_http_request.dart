@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 
 /// Definition of http request data holder.
 // ignore: must_be_immutable
-class AliceHttpRequest with EquatableMixin {
+class VmLogApiHttpRequest with EquatableMixin {
   int size = 0;
   DateTime time = DateTime.now();
   Map<String, String> headers = <String, String>{};
@@ -14,8 +14,8 @@ class AliceHttpRequest with EquatableMixin {
   String? contentType = '';
   List<Cookie> cookies = [];
   Map<String, dynamic> queryParameters = <String, dynamic>{};
-  List<AliceFormDataFile>? formDataFiles;
-  List<AliceFormDataField>? formDataFields;
+  List<VmLogApiFormDataFile>? formDataFiles;
+  List<VmLogApiFormDataField>? formDataFields;
 
   @override
   List<Object?> get props => [
